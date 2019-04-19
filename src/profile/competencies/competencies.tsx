@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Segment, Input, List, Divider } from "semantic-ui-react";
+import { Segment, Input, List, Divider, Header } from "semantic-ui-react";
 
 class CompetenciesPage extends React.Component<any> {
     constructor(props: any) {
@@ -11,6 +11,8 @@ class CompetenciesPage extends React.Component<any> {
     }
 
     public render() {
+        const header = "Competencies";
+        const subheader = "Create and manage competencies, subcompetencies and indicators.";
         const competencies = [
             {
                 name: "Teamwork",
@@ -54,9 +56,10 @@ class CompetenciesPage extends React.Component<any> {
 
         return (
             <Segment>
+                <Header as='h1' c content={header} subheader={subheader} />
                 <Input icon='pencil alternate' placeholder='Enter the name of a new competency...' />
                 <Divider hidden />
-                <List size='huge'>
+                <List>
                     {competencies.map(this.createCompetencyItem)}
                 </List>
             </Segment>

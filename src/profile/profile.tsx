@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Segment, Header } from 'semantic-ui-react';
 
 class ProfilePage extends React.Component {
     public render() {
+        const header = "Profile";
+        const subheader = "Available assessments to pass.";
         const assessments = [
             {
                 source: '/images/avatar/matthew.png',
@@ -32,9 +34,12 @@ class ProfilePage extends React.Component {
         ];
 
         return (
-            <Card.Group>
-                {assessments.map(this.createAssessmentItem)}
-            </Card.Group>
+            <Segment>
+                <Header as='h1' c content={header} subheader={subheader} />
+                <Card.Group>
+                    {assessments.map(this.createAssessmentItem)}
+                </Card.Group>
+            </Segment>
         );
     }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './app.css';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
-import { Segment, Menu, Divider } from 'semantic-ui-react';
+import { Segment, Menu } from 'semantic-ui-react';
 import ProfilePage from './profile/profile';
 import AssessmentPage from './profile/assessment/assessment';
 import CompetenciesPage from './profile/competencies/competencies';
@@ -36,8 +36,6 @@ class App extends React.Component<any, AppState> {
                             <Menu.Item as={Link} name='3' active={item === '3'} onClick={this.handleOnMenuItemClick} to='/questionnaire/'>Questionnaire</Menu.Item>
                             <Menu.Item as={Link} name='4' active={item === '4'} onClick={this.handleOnMenuItemClick} to='/reporting/'>Reporting</Menu.Item>
                         </Menu>
-
-                        <Divider />
 
                         <Route exact path='/competencies/' component={CompetenciesPage} />
                         <Route exact path='/questionnaire/' component={QuestionnairePage} />

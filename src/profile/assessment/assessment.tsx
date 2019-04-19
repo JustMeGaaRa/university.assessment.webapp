@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { Segment, Rating, Header, List, Progress } from 'semantic-ui-react';
+import { Segment, Header, List, Progress, Form, Divider } from 'semantic-ui-react';
 
 type AssessmentPageProps = RouteComponentProps<{ assessmentId: string }>;
 
@@ -13,6 +13,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps> {
 
     public render() {
         const { assessmentId } = this.props.match.params;
+        const subheader = `An assessment for ${assessmentId} to fill.`;
         const questions = [
             {
                 number: 1,
@@ -38,7 +39,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps> {
 
         return (
             <Segment>
-                <Header as='h1' content={assessmentId} />
+                <Header as='h1' c content={assessmentId} subheader={subheader} />
                 <Progress percent={75} progress color='blue' />
                 <List>
                     {questions.map(this.createQuestionItem)}
@@ -50,15 +51,17 @@ class AssessmentPage extends React.Component<AssessmentPageProps> {
     private createQuestionItem({ number, question }: any) {
         return (
             <List.Item>
-                <List.Icon name='question circle outline' size='large' />
-                <List.Content>
-                    <List.Header>
-                        <Header as='h3' content={question} />
-                    </List.Header>
-                    <List.Description>
-                        <Rating maxRating={5} icon='star' size='large' />
-                    </List.Description>
-                </List.Content>
+                <Header as='h3' content={question} />
+                <Divider as='br' hidden fitted />
+                <Form>
+                    <Form.Group inline>
+                        <Form.Radio name='level' type='radio' value='0' label='Not Applicable' />
+                        <Form.Radio name='level' type='radio' value='1' label='Basic' />
+                        <Form.Radio name='level' type='radio' value='2' label='Good' />
+                        <Form.Radio name='level' type='radio' value='3' label='Advanced' />
+                        <Form.Radio name='level' type='radio' value='4' label='Expert' />
+                    </Form.Group>
+                </Form>
             </List.Item>
         );
     }
