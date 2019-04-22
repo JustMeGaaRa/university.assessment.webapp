@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Segment, Header, Form } from "semantic-ui-react";
-import { loadUsers } from "../store/questionnaire.actions";
+import { loadUsers } from "../store/user.actions";
 
 class ReportingPage extends React.Component {
     public render() {

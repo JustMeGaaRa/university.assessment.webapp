@@ -18,7 +18,7 @@ class CompetenciesPage extends React.Component<any> {
 
         return (
             <Segment>
-                <Header as='h1' c content={header} subheader={subheader} />
+                <Header as='h1' content={header} subheader={subheader} />
                 <Input icon='pencil alternate' placeholder='Enter the name of a new competency...' />
                 <Divider hidden />
                 <List>

@@ -1,8 +1,9 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Segment, Header, List, Progress, Form, Divider, ButtonProps, Button, CheckboxProps } from 'semantic-ui-react';
-import { loadQuestions } from "../store/assessment.actions";
 import { IQuestion } from "src/models/IQuestion";
+import { loadQuestions } from "../store/assessment.actions";
+import { findUser } from "src/store/user.actions";
 
 type AssessmentPageProps = RouteComponentProps<{ assessmentId: string }>;
 
@@ -25,12 +26,14 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     public render() {
         const { assessmentId } = this.props.match.params;
         const { createButtonDisabled } = this.state;
-        const subheader = `An assessment for ${assessmentId} to fill.`;
+        const user = findUser(assessmentId);
+        const fullname = user ? user.fullname : assessmentId;
+        const subheader = `An assessment for ${fullname} to fill.`;
         const questions = loadQuestions();
 
         return (
             <Segment>
-                <Header as='h1' c content={assessmentId} subheader={subheader} />
+                <Header as='h1' content={fullname} subheader={subheader} />
                 <Progress percent={75} progress color='blue' />
                 <List>
                     {questions.map(this.createQuestionItem)}

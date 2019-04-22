@@ -1,14 +1,19 @@
 import * as React from "react";
 import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, List, Image, Card, InputOnChangeData } from "semantic-ui-react";
-import { loadProfiles, loadUsers, findUser, loadAssessments } from "../store/questionnaire.actions";
 import { IAssessment } from "src/models/IAssessment";
+import { IAssessmentProfile } from "src/models/IAssessmentProfile";
+import { IUser } from "src/models/IUser";
+import { loadUsers, findUser } from "../store/user.actions";
+import { loadAssessments, loadProfiles } from "src/store/assessment.actions";
 import ProfileCard from "./profile-card";
 
 interface IQuestionnairePageState {
     assessments: IAssessment[];
+    users: IUser[];
+    profiles: IAssessmentProfile[];
     username: string;
     profile: string;
-    createButtonDisabled: boolean;
+    date: string;
 }
 
 class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
@@ -23,26 +28,27 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         this.handleOnClearClick = this.handleOnClearClick.bind(this);
 
         this.state = {
-            assessments: [],
+            assessments: loadAssessments(),
+            users: loadUsers(),
+            profiles: loadProfiles(),
             username: "",
             profile: "",
-            createButtonDisabled: false
+            date: ""
         };
     }
 
     public render() {
         const header = "Questionnaire";
         const subheader = "Available assessments to pass.";
-        const createButtonDisabled = this.checkIfCreateButtonIsDisabled();
-        const assessments = loadAssessments();
-        const users = loadUsers().map(user => {
+        const createButtonDisabled = this.checkIfAssessmentIsInvalid();
+        const users = this.state.users.map(user => {
             return {
                 key: user.username,
                 text: user.fullname,
                 value: user.fullname
             };
         });
-        const profiles = loadProfiles().map(profile => {
+        const profiles = this.state.profiles.map(profile => {
             return {
                 key: profile.name,
                 text: profile.name,
@@ -54,7 +60,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             fluid: true,
             options: users,
             label: 'Target User',
-            placeholder: 'Select a target user for questionnaire'
+            placeholder: 'Select a target user'
         };
         const accessUsers = {
             selection: true,
@@ -63,14 +69,14 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             multiple: true,
             search: true,
             label: 'Users with Access',
-            placeholder: 'Select users with access to a questionnaire'
+            placeholder: 'Select users with access'
         };
         const targetProfileProps = {
             selection: true,
             fluid: true,
             options: profiles,
             label: 'Target Profile',
-            placeholder: 'Select a target profile for questionnaire'
+            placeholder: 'Select a target profile'
         };
         const assessmentDateProps = {
             fluid: true,
@@ -95,7 +101,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                 </Form>
                 <Divider />
                 <Card.Group>
-                    {assessments.map(this.createAssessmentItem)}
+                    {this.state.assessments.map(this.createAssessmentItem)}
                 </Card.Group>
             </Segment>
         );
@@ -116,49 +122,50 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     private createAssessmentItem(result: IAssessment) {
         const assessmentUrl = `/assessments/${result.username}`;
-        const profileCardProps = {
-            imageUrl: result.avatarUrl,
-            link: assessmentUrl,
-            header: result.fullname,
-            meta: result.date.toDateString(),
-            description: result.description
-        };
         return (
-            <ProfileCard {...profileCardProps} />
+            <ProfileCard
+                key={result.username}
+                imageUrl={result.avatarUrl}
+                link={assessmentUrl}
+                header={result.fullname}
+                meta={result.date.toDateString()}
+                description={result.description}
+            />
         );
     }
 
     private handleOnTargetUserChanged(event: any, data: DropdownProps) {
         this.setState({
-            username: data.text ? data.text : ""
+            username: data.value as string
         });
     }
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
         this.setState({
-            profile: data.text ? data.text : ""
+            profile: data.value as string
         });
     }
 
     private handleOnDateRangeChanged(event: any, data: InputOnChangeData) {
-        
+        this.setState({
+            date: data.value as string
+        });
     }
 
     private handleOnCreateClick(event: any, data: ButtonProps) {
-        if (!this.checkIfCreateButtonIsDisabled()) {
+        if (!this.checkIfAssessmentIsInvalid()) {
             const user = findUser(this.state.username);
             const assessment: IAssessment = {
                 username: user ? user.username : "",
                 fullname: user ? user.fullname : "",
-                avatarUrl: "",
-                date: new Date(Date.now()),
+                avatarUrl: "/images/avatar/matthew.png",
+                date: new Date(this.state.date),
                 description: ""
             };
             const assessments = this.state.assessments.concat([assessment]);
 
             this.setState({
-                assessments: assessments,
-                createButtonDisabled: false
+                assessments: assessments
             });
         }
     }
@@ -166,12 +173,11 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private handleOnClearClick(event: any, data: ButtonProps) {
         this.setState({
             username: "",
-            profile: "",
-            createButtonDisabled: false
+            profile: ""
         });
     }
 
-    private checkIfCreateButtonIsDisabled() {
+    private checkIfAssessmentIsInvalid() {
         return this.state.username === ""
             || this.state.profile === "";
     }
