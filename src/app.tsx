@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './app.css';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
-import { Segment, Menu } from 'semantic-ui-react';
+import { Segment, Menu, Image } from 'semantic-ui-react';
 import ProfilePage from './profile/profile';
-import AssessmentPage from './profile/assessment/assessment';
-import CompetenciesPage from './profile/competencies/competencies';
-import QuestionnairePage from './profile/questionnaire/questionnaire';
-import ReportingPage from './profile/reporting/reporting';
+import AssessmentPage from './profile/assessment';
+import CompetenciesPage from './profile/competencies';
+import QuestionnairePage from './profile/questionnaire';
+import ReportingPage from './profile/reporting';
 
 type AppState = {
     activeMenuItem: string;
@@ -35,6 +35,9 @@ class App extends React.Component<any, AppState> {
                             <Menu.Item as={Link} name='2' active={item === '2'} onClick={this.handleOnMenuItemClick} to='/competencies/'>Competencies</Menu.Item>
                             <Menu.Item as={Link} name='3' active={item === '3'} onClick={this.handleOnMenuItemClick} to='/questionnaire/'>Questionnaire</Menu.Item>
                             <Menu.Item as={Link} name='4' active={item === '4'} onClick={this.handleOnMenuItemClick} to='/reporting/'>Reporting</Menu.Item>
+                            <Menu.Item position='right'>
+                                <Image avatar src='/images/avatar/johny.png' />
+                            </Menu.Item>
                         </Menu>
 
                         <Route exact path='/competencies/' component={CompetenciesPage} />

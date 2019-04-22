@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Segment, Input, List, Divider, Header } from "semantic-ui-react";
+import { loadCompetencies } from "../store/competencies.actions";
 
 class CompetenciesPage extends React.Component<any> {
     constructor(props: any) {
@@ -13,46 +14,7 @@ class CompetenciesPage extends React.Component<any> {
     public render() {
         const header = "Competencies";
         const subheader = "Create and manage competencies, subcompetencies and indicators.";
-        const competencies = [
-            {
-                name: "Teamwork",
-                subcompetencies: [
-                    {
-                        name: "Performance",
-                        indicators: [
-                            {
-                                description: "Reasons about the team decisions"
-                            },
-                            {
-                                description: "Respective towars each and every member of the team"
-                            },
-                            {
-                                description: "Respects the rules and project goals"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                name: "Client-Oriented",
-                subcompetencies: [
-                    {
-                        name: "Matching Expectations",
-                        indicators: [
-                            {
-                                description: "Effectively drives the client expectations"
-                            },
-                            {
-                                description: "Informs upfront about potential risks on the project"
-                            },
-                            {
-                                description: "Sets a high standard of service for each client"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
+        const competencies = loadCompetencies();
 
         return (
             <Segment>
@@ -72,7 +34,7 @@ class CompetenciesPage extends React.Component<any> {
                 <List.Icon name='folder' />
                 <List.Content>
                     <List.Header>{name}</List.Header>
-                    <Input icon='pencil alternate' placeholder='Enter the name of a new competency...' />
+                    <Input icon='pencil alternate' placeholder='Enter the name of a new subcompetency...' />
                     <List.List>
                         {subcompetencies.map(this.createSubcompetencyItem)}
                     </List.List>
@@ -87,7 +49,7 @@ class CompetenciesPage extends React.Component<any> {
                 <List.Icon name='folder' />
                 <List.Content>
                     <List.Header>{name}</List.Header>
-                    <Input icon='pencil alternate' placeholder='Enter the name of a new competency...' />
+                    <Input icon='pencil alternate' placeholder='Enter the name of a new indicator...' />
                     <List.List>
                         {indicators.map(this.createIndicatorItem)}
                     </List.List>

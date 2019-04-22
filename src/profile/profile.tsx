@@ -1,37 +1,15 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, Image, Segment, Header } from 'semantic-ui-react';
+import { Card, Segment, Header } from 'semantic-ui-react';
+import { IAssessment } from 'src/models/IAssessment';
+import { loadAssessments } from 'src/store/questionnaire.actions';
+import ProfileCard from './profile-card';
 
 class ProfilePage extends React.Component {
     public render() {
         const header = "Profile";
         const subheader = "Available assessments to pass.";
-        const assessments = [
-            {
-                source: '/images/avatar/matthew.png',
-                name: 'Matthew',
-                date: '19.04.2019',
-                description: 'This assessment should be passed due deadline.'
-            },
-            {
-                source: '/images/avatar/rachel.png',
-                name: 'Rachel',
-                date: '19.04.2019',
-                description: 'This assessment should be passed due deadline.'
-            },
-            {
-                source: '/images/avatar/molly.png',
-                name: 'Molly',
-                date: '19.04.2019',
-                description: 'This assessment should be passed due deadline.'
-            },
-            {
-                source: '/images/avatar/steve.jpg',
-                name: 'Steve',
-                date: '19.04.2019',
-                description: 'This assessment should be passed due deadline.'
-            }
-        ];
+        // TODO: replace stub username with real identity username
+        const assessments = loadAssessments("");
 
         return (
             <Segment>
@@ -43,16 +21,17 @@ class ProfilePage extends React.Component {
         );
     }
 
-    private createAssessmentItem({ source, name, date, description}: any) {
+    private createAssessmentItem(result: IAssessment) {
+        const assessmentUrl = `/assessments/${result.username}`;
+        const profileCardProps = {
+            imageUrl: result.avatarUrl,
+            link: assessmentUrl,
+            header: result.fullname,
+            meta: result.date.toDateString(),
+            description: result.description
+        };
         return (
-            <Card>
-                <Image src={source} />
-                <Card.Content as={Link} to={`/assessments/${name}`}>
-                    <Card.Header content={name} />
-                    <Card.Meta content={date}></Card.Meta>
-                    <Card.Description content={description} />
-                </Card.Content>
-            </Card>
+            <ProfileCard {...profileCardProps} />
         );
     }
 }
