@@ -4,6 +4,7 @@ const competencies: ICompetency[] = [
     {
         id: 1,
         name: "Teamwork",
+        description: "This competency is intended to measure the performance of an employee",
         subcompetencies: [
             {
                 id: 1,
@@ -28,6 +29,7 @@ const competencies: ICompetency[] = [
     {
         id: 2,
         name: "Client-Oriented",
+        description: "This competency is intended to measure the professionalism when working with clients",
         subcompetencies: [
             {
                 id: 2,

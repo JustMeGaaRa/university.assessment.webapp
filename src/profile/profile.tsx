@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Segment, Header } from 'semantic-ui-react';
+import { Card, Segment, Header, Divider } from 'semantic-ui-react';
 import { IAssessment } from 'src/models/IAssessment';
 import { loadAssessments } from 'src/store/assessment.actions';
 import ProfileCard from './profile-card';
@@ -14,6 +14,7 @@ class ProfilePage extends React.Component {
         return (
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
+                <Divider hidden />
                 <Card.Group>
                     {assessments.map(this.createAssessmentItem)}
                 </Card.Group>

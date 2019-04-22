@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Segment, Header, Form } from "semantic-ui-react";
+import { Segment, Header, Form, Divider } from "semantic-ui-react";
 import { loadUsers } from "../store/user.actions";
 
 class ReportingPage extends React.Component {
@@ -17,6 +17,7 @@ class ReportingPage extends React.Component {
         return (
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
+                <Divider hidden />
                 <Form>
                     <Form.Group widths='equal'>
                         <Form.Select fluid label='Target User' options={users} />

@@ -58,6 +58,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         const targetUserProps = {
             selection: true,
             fluid: true,
+            search: true,
             options: users,
             label: 'Target User',
             placeholder: 'Select a target user'
@@ -65,15 +66,16 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         const accessUsers = {
             selection: true,
             fluid: true,
-            options: users,
             multiple: true,
             search: true,
+            options: users,
             label: 'Users with Access',
             placeholder: 'Select users with access'
         };
         const targetProfileProps = {
             selection: true,
             fluid: true,
+            search: true,
             options: profiles,
             label: 'Target Profile',
             placeholder: 'Select a target profile'
@@ -87,6 +89,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         return (
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
+                <Divider hidden />
                 <Form>
                     <Form.Group widths='equal'>
                         <Form.Dropdown {...targetUserProps} onChange={this.handleOnTargetUserChanged} />

@@ -34,6 +34,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
         return (
             <Segment>
                 <Header as='h1' content={fullname} subheader={subheader} />
+                <Divider hidden />
                 <Progress percent={75} progress color='blue' />
                 <List>
                     {questions.map(this.createQuestionItem)}
