@@ -1,5 +1,5 @@
-import { IQuestion } from "./IQuestion";
-
-export interface IAnswer extends IQuestion {
+export interface IAnswer {
+    id: number;
+    question: string;
     result: number;
 }

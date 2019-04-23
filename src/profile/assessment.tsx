@@ -1,9 +1,10 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Segment, Header, List, Progress, Form, Divider, ButtonProps, Button, CheckboxProps } from 'semantic-ui-react';
-import { IQuestion } from "src/models/IQuestion";
-import { loadQuestions } from "../store/assessment.actions";
-import { findUser } from "src/store/user.actions";
+import { findAssessment } from "../store/assessment.actions";
+import { IIndicator } from "src/models/IIndicator";
+import { loadProfileIndicators } from "src/store/competencies.actions";
+import { IAssessment } from "src/models/IAssessment";
 
 type AssessmentPageProps = RouteComponentProps<{ assessmentId: string }>;
 
@@ -24,12 +25,11 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     }
 
     public render() {
-        const { assessmentId } = this.props.match.params;
         const { createButtonDisabled } = this.state;
-        const user = findUser(assessmentId);
-        const fullname = user ? user.fullname : assessmentId;
+        const assessmentId = parseInt(this.props.match.params.assessmentId);
+        const { assessmentProfileId, fullname } = findAssessment(assessmentId) as IAssessment;
+        const questions = loadProfileIndicators(assessmentProfileId);
         const subheader = `An assessment for ${fullname} to fill.`;
-        const questions = loadQuestions();
 
         return (
             <Segment>
@@ -45,10 +45,10 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
         );
     }
 
-    private createQuestionItem({ text }: IQuestion) {
+    private createQuestionItem({ description }: IIndicator) {
         return (
             <List.Item>
-                <Header as='h3' content={text} />
+                <Header as='h3' content={description} />
                 <Divider as='br' hidden fitted />
                 <Form>
                     <Form.Group inline>
@@ -68,7 +68,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     }
 
     private handleOnAnswerChange(event: any, data: CheckboxProps) {
-
+        
     }
 }
 

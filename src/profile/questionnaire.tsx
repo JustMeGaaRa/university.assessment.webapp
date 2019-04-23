@@ -5,7 +5,7 @@ import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { IUser } from "src/models/IUser";
 import { loadUsers, findUser } from "../store/user.actions";
 import { loadAssessments } from "src/store/assessment.actions";
-import { loadProfiles } from "src/store/competencies.actions";
+import { loadProfiles, findProfile } from "src/store/competencies.actions";
 import ProfileCard from "./profile-card";
 
 interface IQuestionnairePageState {
@@ -13,8 +13,8 @@ interface IQuestionnairePageState {
     users: IUser[];
     profiles: IAssessmentProfile[];
     username: string;
-    profile: string;
     date: string;
+    profileId: number;
 }
 
 class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
@@ -33,7 +33,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             users: loadUsers(),
             profiles: loadProfiles(),
             username: "",
-            profile: "",
+            profileId: 0,
             date: ""
         };
     }
@@ -51,9 +51,9 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         });
         const profiles = this.state.profiles.map(profile => {
             return {
-                key: profile.name,
+                key: profile.id,
                 text: profile.name,
-                value: profile.name
+                value: profile.id
             };
         });
         const targetUserProps = {
@@ -125,7 +125,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private createAssessmentItem(result: IAssessment) {
-        const assessmentUrl = `/assessments/${result.username}`;
+        const assessmentUrl = `/assessments/${result.assessmentId}`;
         return (
             <ProfileCard
                 key={result.username}
@@ -145,8 +145,9 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
+        const profile = findProfile(data.value as number);
         this.setState({
-            profile: data.value as string
+            profileId: profile ? profile.id : 0
         });
     }
 
@@ -159,11 +160,14 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private handleOnCreateClick(event: any, data: ButtonProps) {
         if (!this.checkIfAssessmentIsInvalid()) {
             const user = findUser(this.state.username);
+            // TODO: don't pass an id and avatar url when posting to server
             const assessment: IAssessment = {
+                assessmentId: 10,
                 username: user ? user.username : "",
                 fullname: user ? user.fullname : "",
                 avatarUrl: "/images/avatar/matthew.png",
                 date: new Date(this.state.date),
+                assessmentProfileId: this.state.profileId,
                 description: ""
             };
             const assessments = this.state.assessments.concat([assessment]);
@@ -177,13 +181,13 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private handleOnClearClick(event: any, data: ButtonProps) {
         this.setState({
             username: "",
-            profile: ""
+            profileId: 0
         });
     }
 
     private checkIfAssessmentIsInvalid() {
         return this.state.username === ""
-            || this.state.profile === "";
+            || this.state.profileId === 0;
     }
 }
 

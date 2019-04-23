@@ -1,6 +1,7 @@
-import { IQuestion } from "./IQuestion";
+import { IIndicator } from "./IIndicator";
 
 export interface IAssessmentProfile {
+    id: number;
     name: string;
-    indicators: IQuestion[];
+    indicators: IIndicator[];
 }

@@ -1,57 +1,41 @@
-import { IQuestion } from "../models/IQuestion";
 import { IAssessment } from "../models/IAssessment";
 import { IAssessmentResult } from "../models/IAssessmentResult";
 
-const questions: IQuestion[] = [
-    {
-        id: 1,
-        text: 'How good is the cadidate in teamwork?',
-    },
-    {
-        id: 2,
-        text: 'How good is the candidate in communication?',
-    },
-    {
-        id: 3,
-        text: 'How good is the candidate when working with a client?',
-    },
-    {
-        id: 4,
-        text: 'How good is the candidate in estimation?',
-    },
-    {
-        id: 5,
-        text: 'How good is the candidate with presentation?',
-    }
-];
-
 const assessments: IAssessment[] = [
     {
+        assessmentId: 1,
         username: 'matthew',
         fullname: 'Matthew',
         avatarUrl: '/images/avatar/matthew.png',
         date: new Date(2019, 4, 19),
+        assessmentProfileId: 1,
         description: 'This assessment should be passed due deadline.',
     },
     {
+        assessmentId: 2,
         username: 'rachel',
         fullname: 'Rachel',
         avatarUrl: '/images/avatar/rachel.png',
         date: new Date(2019, 4, 19),
+        assessmentProfileId: 2,
         description: 'This assessment should be passed due deadline.'
     },
     {
+        assessmentId: 3,
         username: 'molly',
         fullname: 'Molly',
         avatarUrl: '/images/avatar/molly.png',
         date: new Date(2019, 4, 19),
+        assessmentProfileId: 3,
         description: 'This assessment should be passed due deadline.'
     },
     {
+        assessmentId: 4,
         username: 'steve',
         fullname: 'Steve',
         avatarUrl: '/images/avatar/steve.jpg',
         date: new Date(2019, 4, 19),
+        assessmentProfileId: 1,
         description: 'This assessment should be passed due deadline.'
     }
 ];
@@ -64,41 +48,41 @@ const results: IAssessmentResult[] = [
         answers: [
             {
                 id: 1,
-                text: '',
+                question: '',
                 result: 2,
             },
             {
                 id: 2,
-                text: '',
+                question: '',
                 result: 5,
             },
             {
                 id: 3,
-                text: '',
+                question: '',
                 result: 4
             },
             {
                 id: 4,
-                text: '',
+                question: '',
                 result: 4
             },
             {
                 id: 5,
-                text: '',
+                question: '',
                 result: 3
             }
         ]
     }
 ]
 
-export function loadQuestions() {
-    return questions;
-}
-
 export function loadAssessments(username?: string) {
     return username
         ? assessments.filter(x => x.username.indexOf(username) >= 0)
         : assessments;
+}
+
+export function findAssessment(assessmentId: number) {
+    return assessments.find(x => x.assessmentId == assessmentId);
 }
 
 export function loadAssessmentResult() {

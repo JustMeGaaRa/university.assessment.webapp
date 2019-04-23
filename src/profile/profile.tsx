@@ -23,7 +23,7 @@ class ProfilePage extends React.Component {
     }
 
     private createAssessmentItem(result: IAssessment) {
-        const assessmentUrl = `/assessments/${result.username}`;
+        const assessmentUrl = `/assessments/${result.assessmentId}`;
         return (
             <ProfileCard 
                 key={result.username}
