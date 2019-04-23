@@ -4,7 +4,8 @@ import { IAssessment } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { IUser } from "src/models/IUser";
 import { loadUsers, findUser } from "../store/user.actions";
-import { loadAssessments, loadProfiles } from "src/store/assessment.actions";
+import { loadAssessments } from "src/store/assessment.actions";
+import { loadProfiles } from "src/store/competencies.actions";
 import ProfileCard from "./profile-card";
 
 interface IQuestionnairePageState {

@@ -1,4 +1,5 @@
 import { ICompetency } from "../models/ICompetency";
+import { IAssessmentProfile } from "../models/IAssessmentProfile";
 
 const competencies: ICompetency[] = [
     {
@@ -8,7 +9,7 @@ const competencies: ICompetency[] = [
         subcompetencies: [
             {
                 id: 1,
-                name: "Performance",
+                name: "Performance working with team",
                 indicators: [
                     {
                         id: 1,
@@ -33,7 +34,7 @@ const competencies: ICompetency[] = [
         subcompetencies: [
             {
                 id: 2,
-                name: "Matching Expectations",
+                name: "Working with expectations",
                 indicators: [
                     {
                         id: 4,
@@ -53,6 +54,29 @@ const competencies: ICompetency[] = [
     }
 ];
 
+const profiles: IAssessmentProfile[] = [
+    {
+        name: 'Junior Software Enginner',
+        indicators: []
+    },
+    {
+        name: 'Middle Software Enginner',
+        indicators: []
+    },
+    {
+        name: 'Senior Software Enginner',
+        indicators: []
+    },
+];
+
 export function loadCompetencies() {
     return competencies;
+}
+
+export function loadProfiles() {
+    return profiles;
+}
+
+export function findProfile(name: string) {
+    return profiles.find(x => x.name.toLowerCase() === name.toLowerCase());
 }

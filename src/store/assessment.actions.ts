@@ -1,5 +1,4 @@
 import { IQuestion } from "../models/IQuestion";
-import { IAssessmentProfile } from "../models/IAssessmentProfile";
 import { IAssessment } from "../models/IAssessment";
 import { IAssessmentResult } from "../models/IAssessmentResult";
 
@@ -24,21 +23,6 @@ const questions: IQuestion[] = [
         id: 5,
         text: 'How good is the candidate with presentation?',
     }
-];
-
-const profiles: IAssessmentProfile[] = [
-    {
-        name: 'Junior Software Enginner',
-        indicators: []
-    },
-    {
-        name: 'Middle Software Enginner',
-        indicators: []
-    },
-    {
-        name: 'Senior Software Enginner',
-        indicators: []
-    },
 ];
 
 const assessments: IAssessment[] = [
@@ -109,14 +93,6 @@ const results: IAssessmentResult[] = [
 
 export function loadQuestions() {
     return questions;
-}
-
-export function loadProfiles() {
-    return profiles;
-}
-
-export function findProfile(name: string) {
-    return profiles.find(x => x.name.toLowerCase() === name.toLowerCase());
 }
 
 export function loadAssessments(username?: string) {
