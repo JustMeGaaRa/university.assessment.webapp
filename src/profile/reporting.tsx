@@ -16,7 +16,10 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
     constructor(props: IReportingPageState) {
         super(props);
 
-        this.createCompetencyReport = this.createCompetencyReport.bind(this);
+        this.createProfileReport = this.createProfileReport.bind(this);
+        this.createCompetencyReportSection = this.createCompetencyReportSection.bind(this);
+        this.createGeneralReportChart = this.createGeneralReportChart.bind(this);
+        this.createCompetencyReportChart = this.createCompetencyReportChart.bind(this);
         this.handleOnSearchUserChanged = this.handleOnSearchUserChanged.bind(this);
 
         this.state = {
@@ -58,30 +61,44 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
         }
         
         return (
-            <React.Fragment>
-                {this.createCompetencyReport(report.summary)}
-                {report.data.map(this.createCompetencyReport)}
-            </React.Fragment>
-        )
+            <Segment.Group>
+                {this.createCompetencyReportSection(report.summary)}
+                {report.data.map(this.createCompetencyReportSection)}
+            </Segment.Group>
+        );
     }
 
-
-    private createCompetencyReport(data: IReportData) {
+    private createCompetencyReportSection(data: IReportData) {
         return (
             <Segment>
                 <Header as='h2' content={data.competency} subheader={data.description} />
-                {this.createReportChart(data.general)}
-                <Divider />
-                {this.createReportChart(data.groupped)}
+                {this.createGeneralReportChart(data.general)}
+                {this.createCompetencyReportChart(data.groupped)}
             </Segment>
-        )
+        );
     }
 
-    private createReportChart(group: IReportGroup) {
+    private createGeneralReportChart(group: IReportGroup) {
         return (
             <React.Fragment>
                 <Header as='h3' content={group.title} subheader={group.description} />
-                <ResponsiveContainer height={300}>
+                <ResponsiveContainer height={400}>
+                    <BarChart data={group.data}>
+                        <XAxis dataKey='name' />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar fill='#6192bc' dataKey='average' />
+                    </BarChart>
+                </ResponsiveContainer>
+            </React.Fragment>
+        );
+    }
+
+    private createCompetencyReportChart(group: IReportGroup) {
+        return (
+            <React.Fragment>
+                <Header as='h3' content={group.title} subheader={group.description} />
+                <ResponsiveContainer height={400}>
                     <BarChart data={group.data}>
                         <XAxis dataKey='name' />
                         <YAxis />
@@ -92,11 +109,10 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                         <Bar fill='#f3a465' dataKey='colleague' />
                         <Bar fill='#dc7e7f' dataKey='subordinate' />
                         <Bar fill='#a37cca' dataKey='client' />
-                        <Bar fill='#919397' dataKey='average' />
                     </BarChart>
                 </ResponsiveContainer>
             </React.Fragment>
-        )
+        );
     }
 
     private handleOnSearchUserChanged(event: any, data: DropdownProps) {

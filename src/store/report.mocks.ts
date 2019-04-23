@@ -1,4 +1,83 @@
 import { IProfileReport } from "../models/IProfileReport";
+import { IReportGroup } from "src/models/IReportGroup";
+
+const competencyGeneralReportGroup: IReportGroup = {
+    title: "Summary Overall",
+    description: "Overall summary for single competency divided by type of respondent.",
+    data: [
+        {
+            name: "Average",
+            average: 4,
+        },
+        {
+            name: "Personal",
+            average: 2,
+        },
+        {
+            name: "Supervisor",
+            average: 3,
+        },
+        {
+            name: "Colleague",
+            average: 1,
+        },
+        {
+            name: "Subordinate",
+            average: 5,
+        },
+        {
+            name: "Client",
+            average: 4,
+        }
+    ]
+};
+
+const competencySpecificReportGroup: IReportGroup = {
+    title: "Summary By Competency",
+    description: "Summary for competency divided by subcompetencies.",
+    data: [
+        {
+            name: "Working with expectations",
+            personal: 4,
+            supervisor: 5,
+            colleague: 5,
+            subordinate: 3,
+            client: 4
+        },
+        {
+            name: "Common Interests",
+            personal: 4,
+            supervisor: 5,
+            colleague: 5,
+            subordinate: 3,
+            client: 4
+        },
+        {
+            name: "Meeting Preparation",
+            personal: 4,
+            supervisor: 5,
+            colleague: 5,
+            subordinate: 3,
+            client: 4
+        },
+        {
+            name: "Personal Responsibility",
+            personal: 4,
+            supervisor: 5,
+            colleague: 5,
+            subordinate: 3,
+            client: 4
+        },
+        {
+            name: "Client Support",
+            personal: 4,
+            supervisor: 5,
+            colleague: 5,
+            subordinate: 3,
+            client: 4
+        }
+    ]
+};
 
 export const reports: IProfileReport[] = [
     {
@@ -10,7 +89,7 @@ export const reports: IProfileReport[] = [
             competency: "General",
             description: "",
             general: {
-                title: "Symmary Overall",
+                title: "Summary Overall",
                 description: "",
                 data: [
                     {
@@ -29,7 +108,7 @@ export const reports: IProfileReport[] = [
                         average: 4
                     },
                     {
-                        name: "Organizing Work of Other People",
+                        name: "Organizing Work",
                         personal: 2,
                         average: 5
                     },
@@ -117,146 +196,44 @@ export const reports: IProfileReport[] = [
             {
                 competency: "Customer-Orientation",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
                 competency: "Teamwork",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: [
-                        {
-                            name: "Personal",
-                            average: 4
-                        },
-                        {
-                            name: "Supervisor",
-                            average: 3
-                        },
-                        {
-                            name: "Colleague",
-                            average: 2
-                        },
-                        {
-                            name: "Subordinate",
-                            average: 5
-                        },
-                        {
-                            name: "Client",
-                            average: 4
-                        }
-                    ]
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: [
-                        {
-                            name: "Performance in team",
-                            personal: 5,
-                            supervisor: 4,
-                            colleague: 4,
-                            subordinate: 3,
-                            client: 5
-                        },
-                        {
-                            name: "Following the team rules",
-                            personal: 4,
-                            supervisor: 4,
-                            colleague: 5,
-                            subordinate: 4,
-                            client: 4
-                        },
-                        {
-                            name: "Respect from team",
-                            personal: 3,
-                            supervisor: 4,
-                            colleague: 2,
-                            subordinate: 5,
-                            client: 4
-                        }
-                    ]
-                }
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
-                competency: "",
+                competency: "Effective Interaction",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
-                competency: "",
+                competency: "Organizing Work",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
-                competency: "",
+                competency: "Decision Making",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
-                competency: "",
+                competency: "Result-Orientation",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             },
             {
-                competency: "",
+                competency: "Communication",
                 description: "",
-                general: {
-                    title: "Summary Overall",
-                    description: "",
-                    data: []
-                },
-                groupped: {
-                    title: "Summary By Competency",
-                    description: "",
-                    data: []
-                },
+                general: competencyGeneralReportGroup,
+                groupped: competencySpecificReportGroup,
             }
         ]
     }
