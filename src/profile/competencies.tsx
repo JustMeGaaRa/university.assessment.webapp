@@ -1,44 +1,45 @@
 import * as React from "react";
-import { Segment, List, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData } from "semantic-ui-react";
-import { loadCompetencies } from "../store/competencies.actions";
+import { Segment, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData, Card, Icon, CardProps } from "semantic-ui-react";
+import { loadCompetencies } from "src/store/competencies.actions";
 import { ICompetency } from "src/models/ICompetency";
+import CompetencySegment from "./competency-item";
 
 interface ICompetenciesPageState {
     competencies: ICompetency[];
     openModal: boolean;
     competencyName: string;
+    selectedCompetency: ICompetency[];
 }
 
 class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
     constructor(props: any) {
         super(props);
 
-        this.createCompetencyItem = this.createCompetencyItem.bind(this);
         this.handleOnInputChange = this.handleOnInputChange.bind(this);
         this.handleOnAddButton = this.handleOnAddButton.bind(this);
         this.handleOnModalClose = this.handleOnModalClose.bind(this);
         this.handleOnModalCancel = this.handleOnModalCancel.bind(this);
         this.handleOnModalSave = this.handleOnModalSave.bind(this);
-        this.handleOnEditCompetency = this.handleOnEditCompetency.bind(this);
-        this.handleOnDeleteCompetency = this.handleOnDeleteCompetency.bind(this);
 
         this.state = {
             competencies: loadCompetencies(),
             openModal: false,
-            competencyName: ""
+            competencyName: "",
+            selectedCompetency: loadCompetencies().filter(x => x.id === 1)
         };
     }
 
     public render() {
         const header = "Competencies";
         const subheader = "Create and manage competencies, subcompetencies and indicators.";
+        const { competencies, selectedCompetency } = this.state;
         const addButtonDisabled = this.state.competencyName === "";
         const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
         const inputProps = {
             action: inputAction,
             icon: "edit outline",
             label: "Competency Name",
-            placeholder: "Enter the competency name..."
+            placeholder: "Enter competency name..."
         };
 
         return (
@@ -48,10 +49,26 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
                 <Form>
                     <Form.Input {...inputProps} iconPosition="left" onChange={this.handleOnInputChange} />
                 </Form>
-                <Divider />
-                <List divided verticalAlign='middle'>
-                    {this.state.competencies.map(this.createCompetencyItem)}
-                </List>
+                <Divider hidden />
+                <Card.Group>
+                    {competencies.map(competency => (
+                    <Card onClick={this.handleOnSelectCompetency.bind(this, competency)}>
+                        <Card.Content
+                            header={competency.name} 
+                            meta={competency.date.toDateString()} 
+                            description={competency.description} />
+                        <Card.Content extra>
+                            <Icon name="circle" />
+                            {`${competency.subcompetencies.length} Subcompetencies`}
+                        </Card.Content>
+                    </Card>
+                    ))}
+                </Card.Group>
+                <Divider hidden />
+
+                {selectedCompetency.map(competency => (
+                <CompetencySegment competency={competency} />
+                ))}
 
                 <Modal dimmer open={this.state.openModal} onClose={this.handleOnModalClose}>
                     <Modal.Header>Edit Competency</Modal.Header>
@@ -70,21 +87,15 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
         );
     }
 
-    private createCompetencyItem({ name, description }: ICompetency) {
-        return (
-            <List.Item>
-                <List.Content floated='right'>
-                    <Button icon='edit outline' content='Edit' onClick={this.handleOnEditCompetency} />
-                    <Button icon='trash alternate outline' color='red' content='Delete' onClick={this.handleOnDeleteCompetency} />
-                </List.Content>
-                <List.Content header={name} description={description} />
-            </List.Item>
-        );
-    }
-
     private handleOnInputChange(event: any, data: InputOnChangeData) {
         this.setState({
             competencyName: data.value
+        });
+    }
+
+    private handleOnSelectCompetency(competency: ICompetency ,event: any, data: CardProps) {
+        this.setState({
+            selectedCompetency: [competency]
         });
     }
 
@@ -92,6 +103,7 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
         const competency = {
             id: 1,
             name: this.state.competencyName,
+            date: new Date(Date.now()),
             description: "",
             subcompetencies: []
         };
@@ -117,16 +129,6 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
         this.setState({
             openModal: false
         });
-    }
-
-    private handleOnEditCompetency(event: any, data: ButtonProps) {
-        this.setState({
-            openModal: true
-        });
-    }
-
-    private handleOnDeleteCompetency(event: any, data: ButtonProps) {
-
     }
 }
 

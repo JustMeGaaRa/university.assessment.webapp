@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Segment, Header, Form, Divider, DropdownProps } from "semantic-ui-react";
-import { loadUsers } from "../store/user.actions";
 import { BarChart, XAxis, YAxis, Legend, Bar, Tooltip, ResponsiveContainer } from "recharts";
-import { findReport } from "src/store/report.actions";
 import { IProfileReport } from "src/models/IProfileReport";
 import { IReportData } from "src/models/IReportData";
 import { IReportGroup } from "src/models/IReportGroup";
+import { loadUsers } from "src/store/user.actions";
+import { findReport } from "src/store/report.actions";
 
 interface IReportingPageState {
     username: string;

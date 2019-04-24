@@ -30,7 +30,7 @@ class ProfilePage extends React.Component {
                 imageUrl={result.avatarUrl}
                 link={assessmentUrl}
                 header={result.fullname}
-                meta={result.date.toDateString()}
+                meta={result.availableFromDate.toDateString()}
                 description={result.description}
             />
         );

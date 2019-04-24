@@ -17,9 +17,9 @@ class ProfileCard extends React.Component<IProfileCardProps> {
 
     public render() {
         return (
-            <Card>
+            <Card as={Link} to={this.props.link}>
                 <Image src={this.props.imageUrl} />
-                <Card.Content as={Link} to={this.props.link}>
+                <Card.Content>
                     <Card.Header content={this.props.header} />
                     <Card.Meta content={this.props.meta}></Card.Meta>
                     <Card.Description content={this.props.description} />

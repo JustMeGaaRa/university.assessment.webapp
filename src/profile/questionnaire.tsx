@@ -1,20 +1,21 @@
 import * as React from "react";
 import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, List, Image, Card, InputOnChangeData } from "semantic-ui-react";
-import { IAssessment } from "src/models/IAssessment";
-import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { IUser } from "src/models/IUser";
-import { loadUsers, findUser } from "../store/user.actions";
+import { IAssessment } from "src/models/IAssessment";
+import { IAnswer } from "src/models/IAnswer";
+import { IAssessmentProfile } from "src/models/IAssessmentProfile";
+import { loadUsers, findUser } from "src/store/user.actions";
 import { loadAssessments } from "src/store/assessment.actions";
-import { loadProfiles, findProfile } from "src/store/competencies.actions";
+import { loadProfiles, findProfile } from "src/store/assessment-profile.actions";
 import ProfileCard from "./profile-card";
 
 interface IQuestionnairePageState {
     assessments: IAssessment[];
     users: IUser[];
     profiles: IAssessmentProfile[];
-    username: string;
+    user: IUser | undefined;
     date: string;
-    profileId: number;
+    assessmentProfile: IAssessmentProfile | undefined;
 }
 
 class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
@@ -25,6 +26,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         this.handleOnTargetUserChanged = this.handleOnTargetUserChanged.bind(this);
         this.handleOnTargetProfileChanged = this.handleOnTargetProfileChanged.bind(this);
         this.handleOnDateRangeChanged = this.handleOnDateRangeChanged.bind(this);
+        this.handleOnUserSearchChanged = this.handleOnUserSearchChanged.bind(this);
         this.handleOnCreateClick = this.handleOnCreateClick.bind(this);
         this.handleOnClearClick = this.handleOnClearClick.bind(this);
 
@@ -32,8 +34,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             assessments: loadAssessments(),
             users: loadUsers(),
             profiles: loadProfiles(),
-            username: "",
-            profileId: 0,
+            user: undefined,
+            assessmentProfile: undefined,
             date: ""
         };
     }
@@ -86,6 +88,12 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             label: 'Date Range',
             type: 'date'
         };
+        const searchInputprops = {
+            type: 'search',
+            label: 'User Search',
+            placeholder: 'Enter username to filter',
+            icon: 'search'
+        };
 
         return (
             <Segment>
@@ -99,11 +107,14 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                         <Form.Input {...assessmentDateProps} onChange={this.handleOnDateRangeChanged} />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Button color='blue' content='Create' disabled={createButtonDisabled} onClick={this.handleOnCreateClick} />
-                        <Form.Button color='grey' content='Clear' onClick={this.handleOnClearClick} />
+                        <Form.Button content='Create' primary disabled={createButtonDisabled} onClick={this.handleOnCreateClick} />
+                        <Form.Button content='Clear' onClick={this.handleOnClearClick} />
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Input {...searchInputprops} onChange={this.handleOnUserSearchChanged} />
                     </Form.Group>
                 </Form>
-                <Divider />
+                <Divider hidden />
                 <Card.Group>
                     {this.state.assessments.map(this.createAssessmentItem)}
                 </Card.Group>
@@ -112,7 +123,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private createQuestionnaireItem(questionnaire: IAssessment) {
-        const description = `Created at ${questionnaire.date.toDateString()}`;
+        const description = `Created at ${questionnaire.availableFromDate.toDateString()}`;
         return (
             <List.Item>
                 <Image avatar src='/images/avatar/johny.png' />
@@ -132,7 +143,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                 imageUrl={result.avatarUrl}
                 link={assessmentUrl}
                 header={result.fullname}
-                meta={result.date.toDateString()}
+                meta={result.availableFromDate.toDateString()}
                 description={result.description}
             />
         );
@@ -140,14 +151,13 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     private handleOnTargetUserChanged(event: any, data: DropdownProps) {
         this.setState({
-            username: data.value as string
+            user: findUser(data.value as string)
         });
     }
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
-        const profile = findProfile(data.value as number);
         this.setState({
-            profileId: profile ? profile.id : 0
+            assessmentProfile: findProfile(data.value as number)
         });
     }
 
@@ -157,18 +167,43 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         });
     }
 
+    private handleOnUserSearchChanged(event: any, data: InputOnChangeData) {
+        const searchPattern = (data.value as string).toLowerCase();
+        const assessments = loadAssessments()
+            .filter(x => x.fullname.toLowerCase().indexOf(searchPattern) >= 0);
+        
+        this.setState({
+            assessments
+        });
+    }
+
     private handleOnCreateClick(event: any, data: ButtonProps) {
         if (!this.checkIfAssessmentIsInvalid()) {
-            const user = findUser(this.state.username);
+            const user = this.state.user as IUser;
+            const assessmentProfile = this.state.assessmentProfile as IAssessmentProfile;
+
+            // TODO: copy competency and subcompetency names
+            const answers: IAnswer[] = assessmentProfile.questions.map((x , index) => {
+                return {
+                    id: index,
+                    competency: x.competency,
+                    subcompetency: x.subcompetency,
+                    question: x.text,
+                    result: -1
+                };
+            });
+
             // TODO: don't pass an id and avatar url when posting to server
             const assessment: IAssessment = {
                 assessmentId: 10,
-                username: user ? user.username : "",
-                fullname: user ? user.fullname : "",
+                username: user.username,
+                fullname: user.fullname,
                 avatarUrl: "/images/avatar/matthew.png",
-                date: new Date(this.state.date),
-                assessmentProfileId: this.state.profileId,
-                description: ""
+                availableFromDate: new Date(this.state.date),
+                availableToDate: new Date(this.state.date),
+                assessmentProfile: assessmentProfile.name,
+                description: "",
+                answers: answers
             };
             const assessments = this.state.assessments.concat([assessment]);
 
@@ -180,14 +215,14 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     private handleOnClearClick(event: any, data: ButtonProps) {
         this.setState({
-            username: "",
-            profileId: 0
+            user: undefined,
+            assessmentProfile: undefined
         });
     }
 
     private checkIfAssessmentIsInvalid() {
-        return this.state.username === ""
-            || this.state.profileId === 0;
+        return this.state.user === undefined
+            || this.state.assessmentProfile === undefined;
     }
 }
 
