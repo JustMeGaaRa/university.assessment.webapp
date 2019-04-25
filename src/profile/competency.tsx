@@ -2,7 +2,7 @@ import * as React from "react";
 import { Segment, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData, Card, CardProps } from "semantic-ui-react";
 import { loadCompetencies } from "src/store/competencies.actions";
 import { ICompetency } from "src/models/ICompetency";
-import CompetencySegment from "./competency-item";
+import CompetencySegment from "./competency-segment";
 
 interface ICompetenciesPageState {
     competencies: ICompetency[];

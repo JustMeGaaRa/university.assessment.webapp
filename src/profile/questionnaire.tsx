@@ -40,8 +40,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     }
 
     public render() {
-        const header = "Questionnaire";
-        const subheader = "Available assessments to pass.";
+        const header = "Assessments";
+        const subheader = "Here you can create new assessments and assign employees to it.";
         const placeholder = this.state.assessments.length === 0;
         const placeholderMessage = "No new assessments were created. Try creating one.";
         const { assessments } = this.state;

@@ -3,7 +3,7 @@ import { Segment, Header, Divider, Form, Button, ButtonProps, InputOnChangeData,
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadProfiles } from "src/store/assessment-profile.actions";
 import { loadCompetencies } from "src/store/competencies.actions";
-import CompetencySegment from "./competency-item";
+import CompetencySegment from "./competency-segment";
 
 interface IAssessmentProfilePageState {
     assessmentProfiles: IAssessmentProfile[];
