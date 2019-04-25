@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Card, Segment, Header, Divider } from 'semantic-ui-react';
 import { IAssessment } from 'src/models/IAssessment';
 import { loadAssessments } from 'src/store/assessment.actions';
-import ProfileCard from './profile-card';
+import AssessmentCard from './assessment-card';
+import SegmentPlaceholder from './segment-placeholder';
 
 class ProfilePage extends React.Component {
     public render() {
@@ -10,29 +11,23 @@ class ProfilePage extends React.Component {
         const subheader = "Available assessments to pass.";
         // TODO: replace stub username with real identity username
         const assessments = loadAssessments("");
+        const placeholder = assessments.length === 0;
+        const placeholderMessage = "No assigned assessments were found. Try another time.";
 
         return (
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
                 <Divider hidden />
-                <Card.Group>
-                    {assessments.map(this.createAssessmentItem)}
-                </Card.Group>
+                {placeholder && <SegmentPlaceholder message={placeholderMessage} />}
+                {!placeholder && <Card.Group content={assessments.map(this.createAssessmentSection)} />}
             </Segment>
         );
     }
 
-    private createAssessmentItem(result: IAssessment) {
-        const assessmentUrl = `/assessments/${result.assessmentId}`;
+    private createAssessmentSection(assessment: IAssessment) {
+        const assessmentUrl = `/assessments/${assessment.assessmentId}`;
         return (
-            <ProfileCard 
-                key={result.username}
-                imageUrl={result.avatarUrl}
-                link={assessmentUrl}
-                header={result.fullname}
-                meta={result.availableFromDate.toDateString()}
-                description={result.description}
-            />
+            <AssessmentCard link={assessmentUrl} assessment={assessment} />
         );
     }
 }

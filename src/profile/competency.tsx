@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Segment, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData, Card, Icon, CardProps } from "semantic-ui-react";
+import { Segment, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData, Card, CardProps } from "semantic-ui-react";
 import { loadCompetencies } from "src/store/competencies.actions";
 import { ICompetency } from "src/models/ICompetency";
 import CompetencySegment from "./competency-item";
@@ -11,7 +11,7 @@ interface ICompetenciesPageState {
     selectedCompetency: ICompetency[];
 }
 
-class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
+class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
     constructor(props: any) {
         super(props);
 
@@ -52,23 +52,16 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
                 <Divider hidden />
                 <Card.Group>
                     {competencies.map(competency => (
-                    <Card onClick={this.handleOnSelectCompetency.bind(this, competency)}>
-                        <Card.Content
-                            header={competency.name} 
-                            meta={competency.date.toDateString()} 
-                            description={competency.description} />
-                        <Card.Content extra>
-                            <Icon name="circle" />
-                            {`${competency.subcompetencies.length} Subcompetencies`}
-                        </Card.Content>
-                    </Card>
-                    ))}
+                    <Card 
+                        header={competency.name} 
+                        meta={competency.date.toDateString()} 
+                        description={competency.description}
+                        onClick={this.handleOnSelectCompetency.bind(this, competency)}
+                    />))}
                 </Card.Group>
                 <Divider hidden />
 
-                {selectedCompetency.map(competency => (
-                <CompetencySegment competency={competency} />
-                ))}
+                {selectedCompetency.map(competency => <CompetencySegment competency={competency} />)}
 
                 <Modal dimmer open={this.state.openModal} onClose={this.handleOnModalClose}>
                     <Modal.Header>Edit Competency</Modal.Header>
@@ -132,4 +125,4 @@ class CompetenciesPage extends React.Component<any, ICompetenciesPageState> {
     }
 }
 
-export default CompetenciesPage;
+export default CompetencyPage;

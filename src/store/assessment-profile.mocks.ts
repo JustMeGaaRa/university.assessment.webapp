@@ -2,6 +2,7 @@ import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { indicators } from "./competencies.mocks";
 import { IQuestion } from "src/models/IQuestion";
 import { IIndicator } from "src/models/IIndicator";
+import { loadCompetencies } from "./competencies.actions";
 
 export const profileIndicators = [
     {
@@ -34,16 +35,22 @@ export const profiles: IAssessmentProfile[] = [
     {
         id: 1,
         name: 'Junior Software Enginner',
+        creationDate: new Date(2019, 4, 24),
+        competencies: loadCompetencies(),
         questions: filterIndicators(1)
     },
     {
         id: 2,
         name: 'Middle Software Enginner',
+        creationDate: new Date(2019, 4, 24),
+        competencies: loadCompetencies(),
         questions: filterIndicators(2)
     },
     {
         id: 3,
         name: 'Senior Software Enginner',
+        creationDate: new Date(2019, 4, 24),
+        competencies: loadCompetencies(),
         questions: filterIndicators(3)
     },
 ];

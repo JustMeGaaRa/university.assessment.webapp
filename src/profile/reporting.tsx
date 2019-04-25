@@ -6,31 +6,33 @@ import { IReportData } from "src/models/IReportData";
 import { IReportGroup } from "src/models/IReportGroup";
 import { loadUsers } from "src/store/user.actions";
 import { findReport } from "src/store/report.actions";
+import SegmentPlaceholder from "./segment-placeholder";
 
 interface IReportingPageState {
     username: string;
-    report: IProfileReport | undefined;
+    reports: IProfileReport[];
 }
 
 class ReportingPage extends React.Component<any, IReportingPageState> {
     constructor(props: IReportingPageState) {
         super(props);
 
-        this.createProfileReport = this.createProfileReport.bind(this);
         this.createCompetencyReportSection = this.createCompetencyReportSection.bind(this);
-        this.createGeneralReportChart = this.createGeneralReportChart.bind(this);
-        this.createCompetencyReportChart = this.createCompetencyReportChart.bind(this);
+        this.createGeneralChart = this.createGeneralChart.bind(this);
+        this.createCompetencyChart = this.createCompetencyChart.bind(this);
         this.handleOnSearchUserChanged = this.handleOnSearchUserChanged.bind(this);
 
         this.state = {
             username: "",
-            report: undefined
+            reports: []
         };
     }
     
     public render() {
         const header = "Reporting";
         const subheader = "Reports per user filtered by date.";
+        const placeholder = this.state.reports.length === 0;
+        const placeholderMessage = "No reports were found. Try different filters.";
         const users = loadUsers().map(user => {
             return {
                 key: user.username,
@@ -50,35 +52,32 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                     </Form.Group>
                 </Form>
                 <Divider hidden />
-                {this.createProfileReport(this.state.report)}
+                {placeholder && <SegmentPlaceholder message={placeholderMessage} />}
+                {!placeholder && this.createReportSection()}
             </Segment>
         );
     }
 
-    private createProfileReport(report?: IProfileReport) {
-        if (!report) {
-            return undefined;
-        }
-        
-        return (
+    private createReportSection() {
+        return (this.state.reports.map(report => (
             <Segment.Group>
                 {this.createCompetencyReportSection(report.summary)}
                 {report.data.map(this.createCompetencyReportSection)}
             </Segment.Group>
-        );
+        )));
     }
 
     private createCompetencyReportSection(data: IReportData) {
         return (
             <Segment>
                 <Header as='h2' content={data.competency} subheader={data.description} />
-                {this.createGeneralReportChart(data.general)}
-                {this.createCompetencyReportChart(data.groupped)}
+                {this.createGeneralChart(data.general)}
+                {this.createCompetencyChart(data.groupped)}
             </Segment>
         );
     }
 
-    private createGeneralReportChart(group: IReportGroup) {
+    private createGeneralChart(group: IReportGroup) {
         return (
             <React.Fragment>
                 <Header as='h3' content={group.title} subheader={group.description} />
@@ -94,7 +93,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
         );
     }
 
-    private createCompetencyReportChart(group: IReportGroup) {
+    private createCompetencyChart(group: IReportGroup) {
         return (
             <React.Fragment>
                 <Header as='h3' content={group.title} subheader={group.description} />
@@ -118,7 +117,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
     private handleOnSearchUserChanged(event: any, data: DropdownProps) {
         this.setState({
             username: data.value as string,
-            report: findReport(data.value as string)
+            reports: findReport(data.value as string)
         });
     }
 }

@@ -3,20 +3,18 @@ import { Segment, Header, Divider, Form, Button, ButtonProps, InputOnChangeData,
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadProfiles } from "src/store/assessment-profile.actions";
 import { loadCompetencies } from "src/store/competencies.actions";
-import { IQuestion } from "src/models/IQuestion";
 import CompetencySegment from "./competency-item";
 
 interface IAssessmentProfilePageState {
     assessmentProfiles: IAssessmentProfile[];
     assessmentProfileName: string;
-    questions: IQuestion[];
+    selectedProfile: IAssessmentProfile[];
 }
 
 class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageState> {
     constructor(props: any) {
         super(props);
 
-        this.createAssessmentProfileItem = this.createAssessmentProfileItem.bind(this);
         this.handleOnInputChange = this.handleOnInputChange.bind(this);
         this.handleOnAddButton = this.handleOnAddButton.bind(this);
         this.handleOnSelectProfile = this.handleOnSelectProfile.bind(this);
@@ -24,14 +22,13 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         this.state = {
             assessmentProfiles: loadProfiles(),
             assessmentProfileName: "",
-            questions: []
+            selectedProfile: loadProfiles().filter(x => x.id === 1)
         };
     }
 
     public render() {
         const header = "Assessment Profiles";
         const subheader = "Create and manage assessment profiles.";
-        const competencies = loadCompetencies();
         const addButtonDisabled = this.state.assessmentProfileName === "";
         const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
         const inputProps = {
@@ -52,33 +49,34 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 </Form>
                 <Divider hidden />
                 <Card.Group>
-                    {this.state.assessmentProfiles.map(this.createAssessmentProfileItem)}
+                    {this.state.assessmentProfiles.map(profile => (
+                    <Card onClick={this.handleOnSelectProfile.bind(this, profile)}>
+                        <Card.Content
+                            header={profile.name}
+                            meta={profile.creationDate.toDateString()}
+                            description={`This is an assessment profile for ${profile.name}.`}
+                        />
+                        <Card.Content extra>
+                            <Icon name="circle" />
+                            {`${profile.questions.length} Indicators`}
+                        </Card.Content>
+                    </Card>
+                    ))}
                 </Card.Group>
                 <Segment.Group>
-                    {competencies.map(competency => (
-                    <CompetencySegment competency={competency} />
-                    ))}
+                    {this.state.selectedProfile.map(profile => 
+                        profile.competencies.map(competency => (
+                            <CompetencySegment competency={competency} />
+                    )))}
                 </Segment.Group>
             </Segment>
         );
     }
 
-    private createAssessmentProfileItem(profile: IAssessmentProfile) {
-        const meta = new Date(Date.now()).toDateString();
-        const description = `This is an assessment profile for ${profile.name}.`;
-        return (
-            <Card onClick={this.handleOnSelectProfile}>
-                <Card.Content header={profile.name} meta={meta} description={description} />
-                <Card.Content extra>
-                    <Icon name="circle" />
-                    {`${profile.questions.length} Indicators`}
-                </Card.Content>
-            </Card>
-        );
-    }
-
-    private handleOnSelectProfile(event: any, data: CardProps) {
-        
+    private handleOnSelectProfile(profile: IAssessmentProfile, event: any, data: CardProps) {
+        this.setState({
+            selectedProfile: [profile]
+        });
     }
 
     private handleOnInputChange(event: any, data: InputOnChangeData) {
@@ -91,13 +89,14 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         const profile: IAssessmentProfile = {
             id: 1,
             name: this.state.assessmentProfileName,
-            questions: this.state.questions
+            creationDate: new Date(Date.now()),
+            competencies: [...loadCompetencies()],
+            questions: []
         };
         const assessmentProfiles = this.state.assessmentProfiles.concat(profile);
         this.setState({
             assessmentProfiles,
-            assessmentProfileName: "",
-            questions: []
+            assessmentProfileName: ""
         });
     }
 }

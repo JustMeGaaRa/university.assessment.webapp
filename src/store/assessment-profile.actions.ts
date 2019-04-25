@@ -4,11 +4,6 @@ export function loadProfiles() {
     return profiles;
 }
 
-export function findProfile(assessmentProfileId: number) {
-    return profiles.find(x => x.id === assessmentProfileId);
-}
-
-export function loadProfileQuestions(assessmentProfileId: number) {
-    const profile = findProfile(assessmentProfileId);
-    return profile ? profile.questions : [];
+export function findProfiles(assessmentProfileId: number) {
+    return profiles.filter(x => x.id === assessmentProfileId);
 }

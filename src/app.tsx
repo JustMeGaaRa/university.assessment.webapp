@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import { Segment, Menu, Image } from 'semantic-ui-react';
 import ProfilePage from './profile/profile';
 import AssessmentPage from './profile/assessment';
-import CompetenciesPage from './profile/competencies';
+import CompetencyPage from './profile/competency';
 import AssessmentProfilePage from './profile/assessment-profile';
 import QuestionnairePage from './profile/questionnaire';
 import ReportingPage from './profile/reporting';
@@ -42,7 +42,7 @@ class App extends React.Component<any, AppState> {
                             </Menu.Item>
                         </Menu>
 
-                        <Route exact path='/competencies/' component={CompetenciesPage} />
+                        <Route exact path='/competencies/' component={CompetencyPage} />
                         <Route exact path='/assessment-profiles/' component={AssessmentProfilePage} />
                         <Route exact path='/assessments/' component={QuestionnairePage} />
                         <Route exact path='/assessments/:assessmentId' component={AssessmentPage} />
