@@ -50,7 +50,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Divider hidden />
                 <Card.Group>
                     {this.state.assessmentProfiles.map(profile => (
-                    <Card onClick={this.handleOnSelectProfile.bind(this, profile)}>
+                    <Card key={profile.id} onClick={this.handleOnSelectProfile.bind(this, profile)}>
                         <Card.Content
                             header={profile.name}
                             meta={profile.creationDate.toDateString()}
@@ -66,7 +66,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Segment.Group>
                     {this.state.selectedProfile.map(profile => 
                         profile.competencies.map(competency => (
-                            <CompetencySegment competency={competency} />
+                            <CompetencySegment key={competency.id} competency={competency} />
                     )))}
                 </Segment.Group>
             </Segment>

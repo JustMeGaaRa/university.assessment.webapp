@@ -8,7 +8,7 @@ interface ICompetenciesPageState {
     competencies: ICompetency[];
     openModal: boolean;
     competencyName: string;
-    selectedCompetency: ICompetency[];
+    selectedCompetencies: ICompetency[];
 }
 
 class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
@@ -25,14 +25,14 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
             competencies: loadCompetencies(),
             openModal: false,
             competencyName: "",
-            selectedCompetency: loadCompetencies().filter(x => x.id === 1)
+            selectedCompetencies: loadCompetencies().filter(x => x.id === 1)
         };
     }
 
     public render() {
         const header = "Competencies";
         const subheader = "Create and manage competencies, subcompetencies and indicators.";
-        const { competencies, selectedCompetency } = this.state;
+        const { competencies, selectedCompetencies: selectedCompetency } = this.state;
         const addButtonDisabled = this.state.competencyName === "";
         const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
         const inputProps = {
@@ -53,6 +53,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 <Card.Group>
                     {competencies.map(competency => (
                     <Card 
+                        key={competency.id}
                         header={competency.name} 
                         meta={competency.date.toDateString()} 
                         description={competency.description}
@@ -61,7 +62,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 </Card.Group>
                 <Divider hidden />
 
-                {selectedCompetency.map(competency => <CompetencySegment competency={competency} />)}
+                {selectedCompetency.map(competency => <CompetencySegment key={competency.id} competency={competency} />)}
 
                 <Modal dimmer open={this.state.openModal} onClose={this.handleOnModalClose}>
                     <Modal.Header>Edit Competency</Modal.Header>
@@ -88,7 +89,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     private handleOnSelectCompetency(competency: ICompetency ,event: any, data: CardProps) {
         this.setState({
-            selectedCompetency: [competency]
+            selectedCompetencies: [competency]
         });
     }
 

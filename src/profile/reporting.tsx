@@ -60,7 +60,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
 
     private createReportSection() {
         return (this.state.reports.map(report => (
-            <Segment.Group>
+            <Segment.Group key={report.username}>
                 {this.createCompetencyReportSection(report.summary)}
                 {report.data.map(this.createCompetencyReportSection)}
             </Segment.Group>
@@ -69,7 +69,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
 
     private createCompetencyReportSection(data: IReportData) {
         return (
-            <Segment>
+            <Segment key={data.competency}>
                 <Header as='h2' content={data.competency} subheader={data.description} />
                 {this.createGeneralChart(data.general)}
                 {this.createCompetencyChart(data.groupped)}

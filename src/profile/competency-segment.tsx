@@ -10,7 +10,6 @@ interface ICompetencySegmentProps {
 
 interface ICompetencySegmentState {
     subcompetency: string;
-    competency: ICompetency;
     indicatorNames: { [key: string]: string };
 }
 
@@ -25,13 +24,12 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
 
         this.state = {
             subcompetency: "",
-            competency: props.competency,
             indicatorNames: { }
         };
     }
 
     public render() {
-        const { competency } = this.state;
+        const { competency } = this.props;
         const subcompetencyAction = (
             <Button
                 content='Add'
@@ -63,7 +61,7 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
                     </Form.Group>
                 </Form>
                 {competency.subcompetencies.map(subcompetency => (
-                    <React.Fragment>
+                    <React.Fragment key={subcompetency.id}>
                         <Header content={subcompetency.name} />
                         <Form>
                             <Form.Group widths='equal'>
@@ -80,6 +78,7 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
                         <Label.Group>
                             {subcompetency.indicators.map(indicator => (
                                 <Label
+                                    key={indicator.description}
                                     content={indicator.description}
                                     removeIcon='delete'
                                     onRemove={this.handleOnLabelRemove.bind(this, subcompetency)}
@@ -106,18 +105,15 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
     }
 
     private handleOnAddSubcompetencyButton(event: any, data: ButtonProps) {
+        const { competency } = this.props;
         const subcompetency: ISubcompetency = {
             id: 0,
-            competencyId: this.state.competency.id,
+            competencyId: competency.id,
             name: this.state.subcompetency,
             indicators: []
         };
-        const competency: ICompetency = {
-            ...this.state.competency,
-            subcompetencies: this.state.competency.subcompetencies.concat(subcompetency)
-        };
+        competency.subcompetencies = competency.subcompetencies.concat(subcompetency);
         this.setState({
-            competency: competency,
             subcompetency: "",
             indicatorNames: this.state.indicatorNames,
         });

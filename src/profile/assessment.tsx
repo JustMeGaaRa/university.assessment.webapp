@@ -58,7 +58,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     private createQuestionItem(answer: IAnswer) {
         const handleOnChange = this.handleOnAnswerChange.bind(this, answer);
         return (
-            <List.Item>
+            <List.Item key={answer.id}>
                 <Header as='h3' content={answer.question} />
                 <Divider as='br' hidden fitted />
                 <Form>

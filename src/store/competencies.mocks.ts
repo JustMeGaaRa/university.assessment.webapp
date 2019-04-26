@@ -66,35 +66,35 @@ export const competencies: ICompetency[] = [
         subcompetencies: subcompetencies.filter(x => x.competencyId === 2)
     },
     {
-        id: 2,
+        id: 3,
         name: "Effective Interaction",
         date: new Date(Date.now()),
         description: "This competency is intended to measure the professionalism when working with clients",
         subcompetencies: subcompetencies.filter(x => x.competencyId === 2)
     },
     {
-        id: 2,
+        id: 4,
         name: "Organizing Work",
         date: new Date(Date.now()),
         description: "This competency is intended to measure the professionalism when working with clients",
         subcompetencies: subcompetencies.filter(x => x.competencyId === 2)
     },
     {
-        id: 2,
+        id: 5,
         name: "Decision Making",
         date: new Date(Date.now()),
         description: "This competency is intended to measure the professionalism when working with clients",
         subcompetencies: subcompetencies.filter(x => x.competencyId === 2)
     },
     {
-        id: 2,
+        id: 6,
         name: "Result-Orientation",
         date: new Date(Date.now()),
         description: "This competency is intended to measure the professionalism when working with clients",
         subcompetencies: subcompetencies.filter(x => x.competencyId === 2)
     },
     {
-        id: 2,
+        id: 7,
         name: "Communication",
         date: new Date(Date.now()),
         description: "This competency is intended to measure the professionalism when working with clients",
