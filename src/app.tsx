@@ -20,7 +20,7 @@ class App extends React.Component<any, AppState> {
 
         this.state = {
             activeMenuItem: '1'
-        }
+        };
     }
 
     public render() {

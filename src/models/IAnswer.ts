@@ -1,5 +1,5 @@
 export interface IAnswer {
-    id: number;
+    answerId: number;
     competency: string;
     subcompetency: string;
     question: string;

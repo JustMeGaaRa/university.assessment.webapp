@@ -58,7 +58,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     private createQuestionItem(answer: IAnswer) {
         const handleOnChange = this.handleOnAnswerChange.bind(this, answer);
         return (
-            <List.Item key={answer.id}>
+            <List.Item key={answer.answerId}>
                 <Header as='h3' content={answer.question} />
                 <Divider as='br' hidden fitted />
                 <Form>
@@ -93,7 +93,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
     }
 
     private updateAnswer(original: IAnswer, current: IAnswer, value: number) {
-        const targetValue = original.id === current.id ? value : current.result;
+        const targetValue = original.answerId === current.answerId ? value : current.result;
         return { ...current, result: targetValue };
     }
 }

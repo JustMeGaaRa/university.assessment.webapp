@@ -33,13 +33,11 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
         const subheader = "Reports per user filtered by date.";
         const placeholder = this.state.reports.length === 0;
         const placeholderMessage = "No reports were found. Try different filters.";
-        const users = loadUsers().map(user => {
-            return {
-                key: user.username,
-                text: user.fullname,
-                value: user.fullname
-            };
-        });
+        const users = loadUsers().map(user => ({
+            key: user.username,
+            text: user.fullname,
+            value: user.fullname
+        }));
 
         return (
             <Segment>

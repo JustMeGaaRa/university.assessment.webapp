@@ -1,7 +1,7 @@
 import { ISubcompetency } from "./ISubcompetency";
 
 export interface ICompetency {
-    id: number;
+    competencyId: number;
     name: string;
     date: Date;
     description: string;

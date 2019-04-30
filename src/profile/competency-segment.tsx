@@ -61,7 +61,7 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
                     </Form.Group>
                 </Form>
                 {competency.subcompetencies.map(subcompetency => (
-                    <React.Fragment key={subcompetency.id}>
+                    <React.Fragment key={subcompetency.subcompetencyId}>
                         <Header content={subcompetency.name} />
                         <Form>
                             <Form.Group widths='equal'>
@@ -107,8 +107,8 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
     private handleOnAddSubcompetencyButton(event: any, data: ButtonProps) {
         const { competency } = this.props;
         const subcompetency: ISubcompetency = {
-            id: 0,
-            competencyId: competency.id,
+            subcompetencyId: 0,
+            competencyId: competency.competencyId,
             name: this.state.subcompetency,
             indicators: []
         };
@@ -122,8 +122,8 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
     private handleOnAddIndicatorButton(subcompetency: ISubcompetency, event: any, data: ButtonProps) {
         const indicatorName = this.state.indicatorNames[subcompetency.name];
         const indicator: IIndicator = {
-            id: 0,
-            subcompetencyId: subcompetency.id,
+            indicatorId: 0,
+            subcompetencyId: subcompetency.subcompetencyId,
             description: indicatorName,
         };
         subcompetency.indicators = subcompetency.indicators.concat(indicator);

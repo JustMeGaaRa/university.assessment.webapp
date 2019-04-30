@@ -18,20 +18,20 @@ export function transformToQuestions() {
         .map(toQuestion);
 }
 
-function fromSubcompetency({ name: competency }: ICompetency, { id, name, indicators }: ISubcompetency) {
+function fromSubcompetency({ name: competency }: ICompetency, { subcompetencyId, name, indicators }: ISubcompetency) {
     return {
         competency: competency,
-        subcompetencyId: id,
+        subcompetencyId: subcompetencyId,
         subcompetency: name,
         indicators: indicators
     };
 }
 
-function fromIndicator({ competency, subcompetency }: any, { id, description }: IIndicator) {
+function fromIndicator({ competency, subcompetency }: any, { indicatorId, description }: IIndicator) {
     return {
         competency: competency,
         subcompetency: subcompetency,
-        indicatorId: id,
+        indicatorId: indicatorId,
         indicator: description
     };
 }

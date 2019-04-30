@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, Card, InputOnChangeData } from "semantic-ui-react";
 import { IUser } from "src/models/IUser";
-import { IAssessment } from "src/models/IAssessment";
+import { IAssessment, RespondentType } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadUsers, findUser } from "src/store/user.actions";
 import { loadAssessments } from "src/store/assessment.actions";
@@ -46,20 +46,16 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         const placeholderMessage = "No new assessments were created. Try creating one.";
         const { assessments } = this.state;
         const createButtonDisabled = this.checkIfAssessmentIsInvalid();
-        const users = this.state.users.map(user => {
-            return {
-                key: user.username,
-                text: user.fullname,
-                value: user.fullname
-            };
-        });
-        const profiles = this.state.assessmentProfiles.map(profile => {
-            return {
-                key: profile.id,
-                text: profile.name,
-                value: profile.id
-            };
-        });
+        const users = this.state.users.map(user => ({
+            key: user.username,
+            text: user.fullname,
+            value: user.fullname
+        }));
+        const profiles = this.state.assessmentProfiles.map(profile => ({
+            key: profile.profileId,
+            text: profile.name,
+            value: profile.profileId
+        }));
         const targetUserProps = {
             selection: true,
             fluid: true,
@@ -166,7 +162,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             const assessments = this.state.selectedProfiles.map(profile => {
                 const answers = profile.questions.map((x , index) => {
                     return {
-                        id: index,
+                        answerId: index,
                         competency: x.competency,
                         subcompetency: x.subcompetency,
                         question: x.text,
@@ -178,6 +174,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                     username: user.username,
                     fullname: user.fullname,
                     avatarUrl: "/images/avatar/matthew.png",
+                    respondent: "",
+                    respondentType: RespondentType.Self,
                     availableFromDate: new Date(this.state.date),
                     availableToDate: new Date(this.state.date),
                     assessmentProfile: profile.name,

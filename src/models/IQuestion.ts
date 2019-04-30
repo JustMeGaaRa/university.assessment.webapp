@@ -1,5 +1,5 @@
 export interface IQuestion {
-    id: number;
+    questionId: number;
     competency: string;
     subcompetency: string;
     text: string;

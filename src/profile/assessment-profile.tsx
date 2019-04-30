@@ -22,7 +22,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         this.state = {
             assessmentProfiles: loadProfiles(),
             assessmentProfileName: "",
-            selectedProfile: loadProfiles().filter(x => x.id === 1)
+            selectedProfile: loadProfiles().filter(x => x.profileId === 1)
         };
     }
 
@@ -50,7 +50,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Divider hidden />
                 <Card.Group>
                     {this.state.assessmentProfiles.map(profile => (
-                    <Card key={profile.id} onClick={this.handleOnSelectProfile.bind(this, profile)}>
+                    <Card key={profile.profileId} onClick={this.handleOnSelectProfile.bind(this, profile)}>
                         <Card.Content
                             header={profile.name}
                             meta={profile.creationDate.toDateString()}
@@ -66,7 +66,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Segment.Group>
                     {this.state.selectedProfile.map(profile => 
                         profile.competencies.map(competency => (
-                            <CompetencySegment key={competency.id} competency={competency} />
+                            <CompetencySegment key={competency.competencyId} competency={competency} />
                     )))}
                 </Segment.Group>
             </Segment>
@@ -87,7 +87,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
 
     private handleOnAddButton(event: any, data: ButtonProps) {
         const profile: IAssessmentProfile = {
-            id: 1,
+            profileId: 1,
             name: this.state.assessmentProfileName,
             creationDate: new Date(Date.now()),
             competencies: [...loadCompetencies()],

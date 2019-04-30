@@ -1,23 +1,23 @@
 import { IAnswer } from "src/models/IAnswer";
-import { IAssessment } from "src/models/IAssessment";
+import { IAssessment, RespondentType } from "src/models/IAssessment";
 
 export const answers: IAnswer[] = [
     {
-        id: 1,
+        answerId: 1,
         competency: "Teamwork",
         subcompetency: "Performance working with team",
         question: "Reasons about the team decisions",
         result: -1
     },
     {
-        id: 2,
+        answerId: 2,
         competency: "Teamwork",
         subcompetency: "Performance working with team",
         question: "Respective towars each and every member of the team",
         result: -1
     },
     {
-        id: 3,
+        answerId: 3,
         competency: "Teamwork",
         subcompetency: "Performance working with team",
         question: "Respects the rules and project goals",
@@ -31,6 +31,8 @@ export const assessments: IAssessment[] = [
         username: "matthew",
         fullname: "Matthew",
         avatarUrl: "/images/avatar/matthew.png",
+        respondent: "johny",
+        respondentType: RespondentType.Colleague,
         availableFromDate: new Date(2019, 4, 1),
         availableToDate: new Date(2019, 5, 1),
         description: "This assessment should be passed due deadline.",
@@ -42,6 +44,8 @@ export const assessments: IAssessment[] = [
         username: "rachel",
         fullname: "Rachel",
         avatarUrl: "/images/avatar/rachel.png",
+        respondent: "johny",
+        respondentType: RespondentType.Colleague,
         availableFromDate: new Date(2019, 4, 1),
         availableToDate: new Date(2019, 5, 1),
         assessmentProfile: "Senior Software Enginner",
@@ -53,6 +57,8 @@ export const assessments: IAssessment[] = [
         username: "molly",
         fullname: "Molly",
         avatarUrl: "/images/avatar/molly.png",
+        respondent: "johny",
+        respondentType: RespondentType.Colleague,
         availableFromDate: new Date(2019, 4, 1),
         availableToDate: new Date(2019, 5, 1),
         assessmentProfile: "Senior Software Enginner",
@@ -64,6 +70,8 @@ export const assessments: IAssessment[] = [
         username: "steve",
         fullname: "Steve",
         avatarUrl: "/images/avatar/steve.jpg",
+        respondent: "johny",
+        respondentType: RespondentType.Colleague,
         availableFromDate: new Date(2019, 4, 1),
         availableToDate: new Date(2019, 5, 1),
         assessmentProfile: "Senior Software Enginner",

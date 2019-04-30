@@ -5,5 +5,5 @@ export function loadProfiles() {
 }
 
 export function findProfiles(assessmentProfileId: number) {
-    return profiles.filter(x => x.id === assessmentProfileId);
+    return profiles.filter(x => x.profileId === assessmentProfileId);
 }

@@ -1,7 +1,7 @@
 import { IIndicator } from "./IIndicator";
 
 export interface ISubcompetency {
-    id: number;
+    subcompetencyId: number;
     competencyId: number;
     name: string;
     indicators: IIndicator[];

@@ -1,5 +1,5 @@
 export interface IIndicator {
-    id: number;
+    indicatorId: number;
     subcompetencyId: number;
     description: string;
 }

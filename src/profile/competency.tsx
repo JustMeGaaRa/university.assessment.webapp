@@ -25,7 +25,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
             competencies: loadCompetencies(),
             openModal: false,
             competencyName: "",
-            selectedCompetencies: loadCompetencies().filter(x => x.id === 1)
+            selectedCompetencies: loadCompetencies().filter(x => x.competencyId === 1)
         };
     }
 
@@ -53,7 +53,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 <Card.Group>
                     {competencies.map(competency => (
                     <Card 
-                        key={competency.id}
+                        key={competency.competencyId}
                         header={competency.name} 
                         meta={competency.date.toDateString()} 
                         description={competency.description}
@@ -62,7 +62,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 </Card.Group>
                 <Divider hidden />
 
-                {selectedCompetency.map(competency => <CompetencySegment key={competency.id} competency={competency} />)}
+                {selectedCompetency.map(competency => <CompetencySegment key={competency.competencyId} competency={competency} />)}
 
                 <Modal dimmer open={this.state.openModal} onClose={this.handleOnModalClose}>
                     <Modal.Header>Edit Competency</Modal.Header>
@@ -95,7 +95,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     private handleOnAddButton(event: any, data: ButtonProps) {
         const competency = {
-            id: 1,
+            competencyId: 1,
             name: this.state.competencyName,
             date: new Date(Date.now()),
             description: "",
