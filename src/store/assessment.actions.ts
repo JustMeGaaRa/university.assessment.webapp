@@ -1,11 +1,17 @@
 import { assessments } from "./assessment.mocks";
 
-export function loadAssessments(username?: string) {
+export function loadUserAssessments(username?: string) {
     return username
-        ? assessments.filter(x => x.username.indexOf(username) >= 0)
+        ? assessments.filter(x => x.username.toLowerCase() === username.toLowerCase())
         : assessments;
 }
 
-export function findAssessment(assessmentId: number) {
+export function loadRespondentAssessments(username?: string) {
+    return username
+        ? assessments.filter(x => x.respondent.toLowerCase() === username.toLowerCase())
+        : assessments;
+}
+
+export function findUserAssessment(assessmentId: number) {
     return assessments.find(x => x.assessmentId == assessmentId);
 }

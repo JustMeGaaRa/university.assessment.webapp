@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card, Segment, Header, Divider } from 'semantic-ui-react';
 import { IAssessment } from 'src/models/IAssessment';
-import { loadAssessments } from 'src/store/assessment.actions';
+import { loadRespondentAssessments } from 'src/store/assessment.actions';
 import AssessmentCard from './assessment-card';
 import SegmentPlaceholder from './segment-placeholder';
 
@@ -10,7 +10,7 @@ class ProfilePage extends React.Component {
         const header = "Profile";
         const subheader = "Below you can choose any of the available assessments to pass.";
         // TODO: replace stub username with real identity username
-        const assessments = loadAssessments("");
+        const assessments = loadRespondentAssessments("matthew");
         const placeholder = assessments.length === 0;
         const placeholderMessage = "No assigned assessments were found. Try another time.";
 

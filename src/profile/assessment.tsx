@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import { Segment, Header, List, Progress, Form, Divider, ButtonProps, Button, CheckboxProps } from 'semantic-ui-react';
 import { IAssessment } from "src/models/IAssessment";
 import { IAnswer } from "src/models/IAnswer";
-import { findAssessment } from "../store/assessment.actions";
+import { findUserAssessment } from "../store/assessment.actions";
 
 type AssessmentPageProps = RouteComponentProps<{ assessmentId: string }>;
 
@@ -48,7 +48,7 @@ class AssessmentPage extends React.Component<AssessmentPageProps, IAssessmentPag
 
     public componentDidMount() {
         const assessmentId = parseInt(this.props.match.params.assessmentId);
-        const assessment = findAssessment(assessmentId) as IAssessment;
+        const assessment = findUserAssessment(assessmentId) as IAssessment;
         this.setState({
             fullname: assessment.fullname,
             answers: assessment.answers

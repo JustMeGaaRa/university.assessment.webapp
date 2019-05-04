@@ -5,7 +5,7 @@ import { IProfileReport } from "src/models/IProfileReport";
 import { IReportData } from "src/models/IReportData";
 import { IReportGroup } from "src/models/IReportGroup";
 import { loadUsers } from "src/store/user.actions";
-import { findReport } from "src/store/report.actions";
+import { calculateProfileReport } from "src/store/report-generation";
 import SegmentPlaceholder from "./segment-placeholder";
 
 interface IReportingPageState {
@@ -84,7 +84,8 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                         <XAxis dataKey='name' />
                         <YAxis />
                         <Tooltip />
-                        <Bar fill='#6192bc' dataKey='average' />
+                        <Bar fill='#6192bc' dataKey='personal' />
+                        <Bar fill='#919397' dataKey='average' />
                     </BarChart>
                 </ResponsiveContainer>
             </React.Fragment>
@@ -113,9 +114,10 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
     }
 
     private handleOnSearchUserChanged(event: any, data: DropdownProps) {
+        const userReport = calculateProfileReport(data.value as string, new Date(Date.now()));
         this.setState({
             username: data.value as string,
-            reports: findReport(data.value as string)
+            reports: [userReport]
         });
     }
 }

@@ -4,13 +4,14 @@ import { IUser } from "src/models/IUser";
 import { IAssessment, RespondentType } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadUsers, findUser } from "src/store/user.actions";
-import { loadAssessments } from "src/store/assessment.actions";
+import { loadUserAssessments } from "src/store/assessment.actions";
 import { loadProfiles, findProfiles } from "src/store/assessment-profile.actions";
 import AssessmentCard from "./assessment-card";
 import SegmentPlaceholder from "./segment-placeholder";
 
 interface IQuestionnairePageState {
     assessments: IAssessment[];
+    filteredAssessements: IAssessment[];
     assessmentProfiles: IAssessmentProfile[];
     selectedProfiles: IAssessmentProfile[];
     users: IUser[];
@@ -30,7 +31,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         this.handleOnClearClick = this.handleOnClearClick.bind(this);
 
         this.state = {
-            assessments: loadAssessments(),
+            assessments: loadUserAssessments(),
+            filteredAssessements: loadUserAssessments(),
             assessmentProfiles: loadProfiles(),
             selectedProfiles: [],
             users: loadUsers(),
@@ -42,9 +44,9 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     public render() {
         const header = "Assessments";
         const subheader = "Here you can create new assessments and assign employees to it.";
-        const placeholder = this.state.assessments.length === 0;
+        const { assessments, filteredAssessements } = this.state;
+        const placeholder = filteredAssessements.length === 0;
         const placeholderMessage = "No new assessments were created. Try creating one.";
-        const { assessments } = this.state;
         const createButtonDisabled = this.checkIfAssessmentIsInvalid();
         const users = this.state.users.map(user => ({
             key: user.username,
@@ -146,7 +148,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     private handleOnUserSearchChanged(event: any, data: InputOnChangeData) {
         const searchPattern = (data.value as string).toLowerCase();
-        const assessments = loadAssessments()
+        const assessments = this.state.filteredAssessements
             .filter(x => x.fullname.toLowerCase().indexOf(searchPattern) >= 0);
         
         this.setState({
