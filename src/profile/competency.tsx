@@ -8,6 +8,7 @@ interface ICompetenciesPageState {
     competencies: ICompetency[];
     openModal: boolean;
     competencyName: string;
+    selectedCompetencyId?: number;
     selectedCompetencies: ICompetency[];
 }
 
@@ -54,6 +55,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                     {competencies.map(competency => (
                     <Card 
                         key={competency.competencyId}
+                        color={this.getSelectedColor(competency.competencyId)}
                         header={competency.name} 
                         meta={competency.date.toDateString()} 
                         description={competency.description}
@@ -89,6 +91,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     private handleOnSelectCompetency(competency: ICompetency ,event: any, data: CardProps) {
         this.setState({
+            selectedCompetencyId: competency.competencyId,
             selectedCompetencies: [competency]
         });
     }
@@ -123,6 +126,12 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
         this.setState({
             openModal: false
         });
+    }
+
+    private getSelectedColor(competencyId: number) {
+        return competencyId === this.state.selectedCompetencyId
+            ? "blue"
+            : undefined;
     }
 }
 

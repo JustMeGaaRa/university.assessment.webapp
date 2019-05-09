@@ -8,6 +8,7 @@ import CompetencySegment from "./competency-segment";
 interface IAssessmentProfilePageState {
     assessmentProfiles: IAssessmentProfile[];
     assessmentProfileName: string;
+    selectedProfileId?: number;
     selectedProfile: IAssessmentProfile[];
 }
 
@@ -50,7 +51,10 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Divider hidden />
                 <Card.Group>
                     {this.state.assessmentProfiles.map(profile => (
-                    <Card key={profile.profileId} onClick={this.handleOnSelectProfile.bind(this, profile)}>
+                    <Card
+                        key={profile.profileId}
+                        color={this.getSelectedColor(profile.profileId)}
+                        onClick={this.handleOnSelectProfile.bind(this, profile)}>
                         <Card.Content
                             header={profile.name}
                             meta={profile.creationDate.toDateString()}
@@ -75,6 +79,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
 
     private handleOnSelectProfile(profile: IAssessmentProfile, event: any, data: CardProps) {
         this.setState({
+            selectedProfileId: profile.profileId,
             selectedProfile: [profile]
         });
     }
@@ -98,6 +103,12 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
             assessmentProfiles,
             assessmentProfileName: ""
         });
+    }
+
+    private getSelectedColor(profileId: number) {
+        return profileId === this.state.selectedProfileId
+            ? "blue"
+            : undefined;
     }
 }
 
