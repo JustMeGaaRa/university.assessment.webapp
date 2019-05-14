@@ -110,8 +110,8 @@ function reverseAnswersHierarchy(assessments: IAssessment[]) {
  * @param username A username for whom to load the assessment results.
  * @param date A date used to load only relevant assessments.
  */
-export function calculateProfileReport(username: string, date: Date) {
-    const assessments = loadUserAssessments(username);
+export async function calculateProfileReport(username: string, date: Date) {
+    const assessments = await loadUserAssessments(username);
     const competencyAnswers = reverseAnswersHierarchy(assessments);
     const competencyReports = competencyAnswers
         .map(result => {

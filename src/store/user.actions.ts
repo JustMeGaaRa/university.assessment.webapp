@@ -20,7 +20,7 @@ const users: IUser[] = [
 ];
 
 export function loadUsers() {
-    return users;
+    return Promise.resolve(users);
 }
 
 export function findUser(username: string) {

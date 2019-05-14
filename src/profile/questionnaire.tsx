@@ -4,7 +4,7 @@ import { IUser } from "src/models/IUser";
 import { IAssessment, RespondentType } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadUsers, findUser } from "src/store/user.actions";
-import { loadUserAssessments } from "src/store/assessment.actions";
+import { loadUserAssessments, createAssessment } from "src/store/assessment.actions";
 import { loadProfiles, findProfiles } from "src/store/assessment-profile.actions";
 import AssessmentCard from "./assessment-card";
 import SegmentPlaceholder from "./segment-placeholder";
@@ -31,11 +31,11 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         this.handleOnClearClick = this.handleOnClearClick.bind(this);
 
         this.state = {
-            assessments: loadUserAssessments(),
-            filteredAssessements: loadUserAssessments(),
-            assessmentProfiles: loadProfiles(),
+            assessments: [],
+            filteredAssessements: [],
+            assessmentProfiles: [],
             selectedProfiles: [],
-            users: loadUsers(),
+            users: [],
             selectedUser: undefined,
             date: ""
         };
@@ -121,6 +121,30 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         );
     }
 
+    public componentDidMount() {
+        loadProfiles()
+            .then(values => {
+                this.setState({
+                    assessmentProfiles: values
+                });
+            });
+            
+        loadUserAssessments()
+            .then(values => {
+                this.setState({
+                    assessments: values,
+                    filteredAssessements: values
+                });
+            });
+
+        loadUsers()
+            .then(values => {
+                this.setState({
+                    users: values
+                });
+            });
+    }
+
     private createAssessmentSection(assessment: IAssessment) {
         const assessmentUrl = `/assessments/${assessment.assessmentId}`;
         return (
@@ -159,9 +183,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private handleOnCreateClick(event: any, data: ButtonProps) {
         if (!this.checkIfAssessmentIsInvalid()) {
             const user = this.state.selectedUser as IUser;
-
-            // TODO: don't pass an id and avatar url when posting to server
-            const assessments = this.state.selectedProfiles.map(profile => {
+            
+            this.state.selectedProfiles.map(profile => {
                 const answers = profile.questions.map((x , index) => {
                     return {
                         answerId: index,
@@ -171,7 +194,8 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                         result: -1
                     };
                 });
-                return {
+                // TODO: don't pass an id and avatar url when posting to server
+                const assessment = {
                     assessmentId: 0,
                     username: user.username,
                     fullname: user.fullname,
@@ -184,10 +208,13 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                     description: "",
                     answers: answers
                 };
-            });
 
-            this.setState({
-                assessments: this.state.assessments.concat(assessments)
+                createAssessment(assessment)
+                    .then(values => {
+                        this.setState({
+                            assessments: values
+                        });
+                    });
             });
         }
     }

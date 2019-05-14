@@ -5,12 +5,24 @@ import { loadRespondentAssessments } from 'src/store/assessment.actions';
 import AssessmentCard from './assessment-card';
 import SegmentPlaceholder from './segment-placeholder';
 
-class ProfilePage extends React.Component {
+interface IProfilePageState {
+    assessments: IAssessment[];
+}
+
+class ProfilePage extends React.Component<{}, IProfilePageState> {
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            assessments: []
+        };
+    }
+
     public render() {
         const header = "Profile";
         const subheader = "Below you can choose any of the available assessments to pass.";
         // TODO: replace stub username with real identity username
-        const assessments = loadRespondentAssessments("matthew");
+        const assessments = this.state.assessments;
         const placeholder = assessments.length === 0;
         const placeholderMessage = "No assigned assessments were found. Try another time.";
 
@@ -22,6 +34,15 @@ class ProfilePage extends React.Component {
                 {!placeholder && <Card.Group content={assessments.map(this.createAssessmentSection)} />}
             </Segment>
         );
+    }
+
+    public componentDidMount() {
+        loadRespondentAssessments("matthew")
+            .then(values => {
+                this.setState({
+                    assessments: values
+                });
+            });
     }
 
     private createAssessmentSection(assessment: IAssessment) {

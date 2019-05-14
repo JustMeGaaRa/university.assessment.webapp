@@ -1,12 +1,11 @@
 import * as React from "react";
-import { Segment, Divider, Header, Button, Form, ButtonProps, Modal, ModalProps, InputOnChangeData, Card, CardProps } from "semantic-ui-react";
-import { loadCompetencies } from "src/store/competencies.actions";
+import { Segment, Divider, Header, Button, Form, ButtonProps, InputOnChangeData, Card, CardProps } from "semantic-ui-react";
+import { loadCompetencies, createCompetency } from "src/store/competencies.actions";
 import { ICompetency } from "src/models/ICompetency";
 import CompetencySegment from "./competency-segment";
 
 interface ICompetenciesPageState {
     competencies: ICompetency[];
-    openModal: boolean;
     competencyName: string;
     selectedCompetencyId?: number;
     selectedCompetencies: ICompetency[];
@@ -18,15 +17,11 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
         this.handleOnInputChange = this.handleOnInputChange.bind(this);
         this.handleOnAddButton = this.handleOnAddButton.bind(this);
-        this.handleOnModalClose = this.handleOnModalClose.bind(this);
-        this.handleOnModalCancel = this.handleOnModalCancel.bind(this);
-        this.handleOnModalSave = this.handleOnModalSave.bind(this);
 
         this.state = {
-            competencies: loadCompetencies(),
-            openModal: false,
+            competencies: [],
             competencyName: "",
-            selectedCompetencies: loadCompetencies().filter(x => x.competencyId === 1)
+            selectedCompetencies: []
         };
     }
 
@@ -64,23 +59,21 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 </Card.Group>
                 <Divider hidden />
 
-                {selectedCompetency.map(competency => <CompetencySegment key={competency.competencyId} competency={competency} />)}
-
-                <Modal dimmer open={this.state.openModal} onClose={this.handleOnModalClose}>
-                    <Modal.Header>Edit Competency</Modal.Header>
-                    <Modal.Content>
-                        <Modal.Description>
-                            <p>We've found the following gravatar image associated with your e-mail address.</p>
-                            <p>Is it okay to use this photo?</p>
-                        </Modal.Description>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button positive content="Save" onClick={this.handleOnModalSave} />
-                        <Button content="Cancel" onClick={this.handleOnModalCancel} />
-                    </Modal.Actions>
-                </Modal>
+                {selectedCompetency.map(competency => (
+                    <CompetencySegment key={competency.competencyId} competency={competency} />
+                ))}
             </Segment>
         );
+    }
+
+    public componentDidMount() {
+        loadCompetencies()
+            .then(values => {
+                this.setState({
+                    competencies: values,
+                    selectedCompetencies: values.filter(x => x.competencyId === 1)
+                });
+            });
     }
 
     private handleOnInputChange(event: any, data: InputOnChangeData) {
@@ -104,28 +97,12 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
             description: "",
             subcompetencies: []
         };
-        const competencies = this.state.competencies.concat(competency);
-        this.setState({
-            competencies: competencies
-        });
-    }
-
-    private handleOnModalClose(event: any, data: ModalProps) {
-        this.setState({
-            openModal: false
-        });
-    }
-
-    private handleOnModalCancel(event: any, data: ButtonProps) {
-        this.setState({
-            openModal: false
-        });
-    }
-
-    private handleOnModalSave(event: any, data: ButtonProps) {
-        this.setState({
-            openModal: false
-        });
+        createCompetency(competency)
+            .then(values => {
+                this.setState({
+                    competencies: values
+                });
+            });
     }
 
     private getSelectedColor(competencyId: number) {

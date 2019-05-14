@@ -33,13 +33,13 @@ class App extends React.Component<any, AppState> {
                         <Segment style={{ height: '100vh' }}>
                             <Menu secondary size='huge' color='blue'>
                                 <Menu.Item as={Link} name='1' active={item === '1'} onClick={this.handleOnMenuItemClick} to='/'>Profile</Menu.Item>
-                                <Menu.Item as={Link} name='2' active={item === '2'} onClick={this.handleOnMenuItemClick} to='/competencies/'>Competencies</Menu.Item>
-                                <Menu.Item as={Link} name='3' active={item === '3'} onClick={this.handleOnMenuItemClick} to='/assessment-profiles/'>Assessment Profiles</Menu.Item>
-                                <Menu.Item as={Link} name='4' active={item === '4'} onClick={this.handleOnMenuItemClick} to='/assessments/'>Assessments</Menu.Item>
-                                <Menu.Item as={Link} name='5' active={item === '5'} onClick={this.handleOnMenuItemClick} to='/reporting/'>Reporting</Menu.Item>
+                                <Menu.Item as={Link} name='2' active={item === '2'} onClick={this.handleOnMenuItemClick} to='/assessments/'>Assessments</Menu.Item>
+                                <Menu.Item as={Link} name='3' active={item === '3'} onClick={this.handleOnMenuItemClick} to='/reporting/'>Reporting</Menu.Item>
                                 <Menu.Menu position='right'>
                                     <Dropdown item text='Matthew'>
                                         <Dropdown.Menu>
+                                            <Dropdown.Item as={Link} name='4' onClick={this.handleOnMenuItemClick} to='/competencies/'>Competencies</Dropdown.Item>
+                                            <Dropdown.Item as={Link} name='5' onClick={this.handleOnMenuItemClick} to='/assessment-profiles/'>Assessment Profiles</Dropdown.Item>
                                             <Dropdown.Item text='Sign Out' />
                                         </Dropdown.Menu>
                                     </Dropdown>

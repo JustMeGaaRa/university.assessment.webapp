@@ -1,11 +1,13 @@
 import * as React from "react";
 import { Segment, Header, Divider, Form, Button, ButtonProps, InputOnChangeData, Card, Icon, CardProps } from "semantic-ui-react";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
-import { loadProfiles } from "src/store/assessment-profile.actions";
+import { loadProfiles, createProfile } from "src/store/assessment-profile.actions";
 import { loadCompetencies } from "src/store/competencies.actions";
 import CompetencySegment from "./competency-segment";
+import { ICompetency } from "src/models/ICompetency";
 
 interface IAssessmentProfilePageState {
+    competencies: ICompetency[];
     assessmentProfiles: IAssessmentProfile[];
     assessmentProfileName: string;
     selectedProfileId?: number;
@@ -21,9 +23,10 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         this.handleOnSelectProfile = this.handleOnSelectProfile.bind(this);
 
         this.state = {
-            assessmentProfiles: loadProfiles(),
+            competencies: [],
+            assessmentProfiles: [],
             assessmentProfileName: "",
-            selectedProfile: loadProfiles().filter(x => x.profileId === 1)
+            selectedProfile: []
         };
     }
 
@@ -77,6 +80,23 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         );
     }
 
+    public componentDidMount() {
+        loadCompetencies()
+            .then(values => {
+                this.setState({
+                    competencies: values
+                });
+            });
+
+        loadProfiles()
+            .then(values => {
+                this.setState({
+                    assessmentProfiles: values,
+                    selectedProfile: values.filter(x => x.profileId === 1)
+                });
+            });
+    }
+
     private handleOnSelectProfile(profile: IAssessmentProfile, event: any, data: CardProps) {
         this.setState({
             selectedProfileId: profile.profileId,
@@ -95,14 +115,16 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
             profileId: 1,
             name: this.state.assessmentProfileName,
             creationDate: new Date(Date.now()),
-            competencies: [...loadCompetencies()],
+            competencies: [...this.state.competencies],
             questions: []
         };
-        const assessmentProfiles = this.state.assessmentProfiles.concat(profile);
-        this.setState({
-            assessmentProfiles,
-            assessmentProfileName: ""
-        });
+        createProfile(profile)
+            .then(values => {
+                this.setState({
+                    assessmentProfiles: values,
+                    assessmentProfileName: ""
+                });
+            });
     }
 
     private getSelectedColor(profileId: number) {

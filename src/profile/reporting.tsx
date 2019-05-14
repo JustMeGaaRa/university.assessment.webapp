@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Segment, Header, Form, Divider, DropdownProps } from "semantic-ui-react";
 import { BarChart, XAxis, YAxis, Legend, Bar, Tooltip, ResponsiveContainer } from "recharts";
+import { IUser } from "src/models/IUser";
 import { IProfileReport } from "src/models/IProfileReport";
 import { IReportData } from "src/models/IReportData";
 import { IReportGroup } from "src/models/IReportGroup";
@@ -10,6 +11,7 @@ import SegmentPlaceholder from "./segment-placeholder";
 
 interface IReportingPageState {
     username: string;
+    users: IUser[];
     reports: IProfileReport[];
 }
 
@@ -24,6 +26,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
 
         this.state = {
             username: "",
+            users: [],
             reports: []
         };
     }
@@ -33,7 +36,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
         const subheader = "Reports per user filtered by date.";
         const placeholder = this.state.reports.length === 0;
         const placeholderMessage = "No reports were found. Try different filters.";
-        const users = loadUsers().map(user => ({
+        const users = this.state.users.map(user => ({
             key: user.username,
             text: user.fullname,
             value: user.fullname
@@ -54,6 +57,15 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                 {!placeholder && this.createReportSection()}
             </Segment>
         );
+    }
+
+    public componentDidMount() {
+        loadUsers()
+            .then(values => {
+                this.setState({
+                    users: values
+                });
+            });
     }
 
     private createReportSection() {
@@ -114,11 +126,13 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
     }
 
     private handleOnSearchUserChanged(event: any, data: DropdownProps) {
-        const userReport = calculateProfileReport(data.value as string, new Date(Date.now()));
-        this.setState({
-            username: data.value as string,
-            reports: [userReport]
-        });
+        calculateProfileReport(data.value as string, new Date(Date.now()))
+            .then(value => {
+                this.setState({
+                    username: data.value as string,
+                    reports: [value]
+                });
+            });
     }
 }
 
