@@ -1,4 +1,3 @@
-import { IQuestion } from "./IQuestion";
 import { ICompetency } from "./ICompetency";
 
 export interface IAssessmentProfile {
@@ -6,5 +5,4 @@ export interface IAssessmentProfile {
     name: string;
     creationDate: Date;
     competencies: ICompetency[];
-    questions: IQuestion[];
 }

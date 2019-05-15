@@ -1,15 +1,17 @@
 import * as React from "react";
 import { Segment, Header, Divider, Form, Button, ButtonProps, InputOnChangeData, Card, Icon, CardProps } from "semantic-ui-react";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
+import { ICompetency } from "src/models/ICompetency";
 import { loadProfiles, createProfile } from "src/store/assessment-profile.actions";
 import { loadCompetencies } from "src/store/competencies.actions";
 import CompetencySegment from "./competency-segment";
-import { ICompetency } from "src/models/ICompetency";
+import SegmentPlaceholder from "./segment-placeholder";
 
 interface IAssessmentProfilePageState {
     competencies: ICompetency[];
     assessmentProfiles: IAssessmentProfile[];
     assessmentProfileName: string;
+    assessmentProfileSummary: string;
     selectedProfileId?: number;
     selectedProfile: IAssessmentProfile[];
 }
@@ -18,7 +20,8 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
     constructor(props: any) {
         super(props);
 
-        this.handleOnInputChange = this.handleOnInputChange.bind(this);
+        this.handleOnNameChange = this.handleOnNameChange.bind(this);
+        this.handleOnSummaryChange = this.handleOnSummaryChange.bind(this);
         this.handleOnAddButton = this.handleOnAddButton.bind(this);
         this.handleOnSelectProfile = this.handleOnSelectProfile.bind(this);
 
@@ -26,6 +29,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
             competencies: [],
             assessmentProfiles: [],
             assessmentProfileName: "",
+            assessmentProfileSummary: "",
             selectedProfile: []
         };
     }
@@ -33,14 +37,11 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
     public render() {
         const header = "Assessment Profiles";
         const subheader = "Create and manage assessment profiles.";
-        const addButtonDisabled = this.state.assessmentProfileName === "";
+        const { assessmentProfiles, assessmentProfileName, assessmentProfileSummary } = this.state;
+        const placeholder = assessmentProfiles.length === 0;
+        const placeholderMessage = "No assessment profiles were found. Try creating one.";
+        const addButtonDisabled = assessmentProfileName === "" || assessmentProfileSummary === "";
         const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
-        const inputProps = {
-            action: inputAction,
-            icon: "edit outline",
-            label: "Profile Name",
-            placeholder: "Enter assessment profile name..."
-        };
 
         return (
             <Segment>
@@ -48,34 +49,55 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                 <Divider hidden />
                 <Form>
                     <Form.Group widths='equal'>
-                        <Form.Input {...inputProps} iconPosition="left" onChange={this.handleOnInputChange} />
+                        <Form.Input 
+                            icon="edit outline"
+                            iconPosition="left"
+                            label="Profile Name"
+                            placeholder="Enter assessment profile name..."
+                            onChange={this.handleOnNameChange}
+                        />
+                        <Form.Input
+                            action={inputAction}
+                            icon="edit outline"
+                            iconPosition="left"
+                            label="Profile Summary"
+                            placeholder="Enter assessment profile description..."
+                            onChange={this.handleOnSummaryChange}
+                        />
                     </Form.Group>
                 </Form>
                 <Divider hidden />
-                <Card.Group>
-                    {this.state.assessmentProfiles.map(profile => (
-                    <Card
-                        key={profile.profileId}
-                        color={this.getSelectedColor(profile.profileId)}
-                        onClick={this.handleOnSelectProfile.bind(this, profile)}>
-                        <Card.Content
-                            header={profile.name}
-                            meta={profile.creationDate.toDateString()}
-                            description={`This is an assessment profile for ${profile.name}.`}
-                        />
-                        <Card.Content extra>
-                            <Icon name="circle" />
-                            {`${profile.questions.length} Indicators`}
-                        </Card.Content>
-                    </Card>
-                    ))}
-                </Card.Group>
-                <Segment.Group>
-                    {this.state.selectedProfile.map(profile => 
-                        profile.competencies.map(competency => (
-                            <CompetencySegment key={competency.competencyId} competency={competency} />
-                    )))}
-                </Segment.Group>
+                {placeholder && (
+                    <SegmentPlaceholder message={placeholderMessage} />
+                )}
+                {!placeholder && (
+                    <Card.Group>
+                        {this.state.assessmentProfiles.map(profile => (
+                            <Card
+                                key={profile.profileId}
+                                color={this.getSelectedColor(profile.profileId)}
+                                onClick={this.handleOnSelectProfile.bind(this, profile)}>
+                                <Card.Content
+                                    header={profile.name}
+                                    meta={profile.creationDate.toDateString()}
+                                    description={`This is an assessment profile for ${profile.name}.`}
+                                />
+                                <Card.Content extra>
+                                    <Icon name="circle" />
+                                    {`${profile.competencies.length} Competencies`}
+                                </Card.Content>
+                            </Card>
+                        ))}
+                    </Card.Group>
+                )}
+                {!placeholder && (
+                    <Segment.Group>
+                        {this.state.selectedProfile.map(profile => 
+                            profile.competencies.map(competency => (
+                                <CompetencySegment key={competency.competencyId} competency={competency} />
+                        )))}
+                    </Segment.Group>
+                )}
             </Segment>
         );
     }
@@ -104,25 +126,26 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         });
     }
 
-    private handleOnInputChange(event: any, data: InputOnChangeData) {
+    private handleOnNameChange(event: any, data: InputOnChangeData) {
         this.setState({
             assessmentProfileName: data.value
         });
     }
 
+    private handleOnSummaryChange(event: any, data: InputOnChangeData) {
+        this.setState({
+            assessmentProfileSummary: data.value
+        });
+    }
+
     private handleOnAddButton(event: any, data: ButtonProps) {
-        const profile: IAssessmentProfile = {
-            profileId: 1,
-            name: this.state.assessmentProfileName,
-            creationDate: new Date(Date.now()),
-            competencies: [...this.state.competencies],
-            questions: []
-        };
-        createProfile(profile)
+        const { assessmentProfileName, assessmentProfileSummary } = this.state;
+        createProfile(assessmentProfileName, assessmentProfileSummary)
             .then(values => {
                 this.setState({
                     assessmentProfiles: values,
-                    assessmentProfileName: ""
+                    assessmentProfileName: "",
+                    assessmentProfileSummary: ""
                 });
             });
     }

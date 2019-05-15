@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, Card, InputOnChangeData } from "semantic-ui-react";
 import { IUser } from "src/models/IUser";
-import { IAssessment, RespondentType } from "src/models/IAssessment";
+import { IAssessment } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadUsers, findUser } from "src/store/user.actions";
 import { loadUserAssessments, createAssessment } from "src/store/assessment.actions";
@@ -159,9 +159,12 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
-        this.setState({
-            selectedProfiles: findProfiles(data.value as number)
-        });
+        findProfiles(data.value as number)
+            .then(values => {
+                this.setState({
+                    selectedProfiles: values
+                });
+            });
     }
 
     private handleOnDateRangeChanged(event: any, data: InputOnChangeData) {
@@ -183,33 +186,11 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private handleOnCreateClick(event: any, data: ButtonProps) {
         if (!this.checkIfAssessmentIsInvalid()) {
             const user = this.state.selectedUser as IUser;
+            const date = new Date(this.state.date);
             
+            // TODO: don't pass an id and avatar url when posting to server
             this.state.selectedProfiles.map(profile => {
-                const answers = profile.questions.map((x , index) => {
-                    return {
-                        answerId: index,
-                        competency: x.competency,
-                        subcompetency: x.subcompetency,
-                        question: x.text,
-                        result: -1
-                    };
-                });
-                // TODO: don't pass an id and avatar url when posting to server
-                const assessment = {
-                    assessmentId: 0,
-                    username: user.username,
-                    fullname: user.fullname,
-                    avatarUrl: "/images/avatar/matthew.png",
-                    respondent: "",
-                    respondentType: RespondentType.Self,
-                    availableFromDate: new Date(this.state.date),
-                    availableToDate: new Date(this.state.date),
-                    assessmentProfile: profile.name,
-                    description: "",
-                    answers: answers
-                };
-
-                createAssessment(assessment)
+                createAssessment(user, date, date, profile)
                     .then(values => {
                         this.setState({
                             assessments: values

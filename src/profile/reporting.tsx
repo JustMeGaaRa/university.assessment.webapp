@@ -53,8 +53,17 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                     </Form.Group>
                 </Form>
                 <Divider hidden />
-                {placeholder && <SegmentPlaceholder message={placeholderMessage} />}
-                {!placeholder && this.createReportSection()}
+                {placeholder && (
+                    <SegmentPlaceholder message={placeholderMessage} />
+                )}
+                {!placeholder && (
+                    this.state.reports.map(report => (
+                        <Segment.Group key={report.username}>
+                            {this.createCompetencyReportSection(report.summary)}
+                            {report.data.map(this.createCompetencyReportSection)}
+                        </Segment.Group>
+                    ))
+                )}
             </Segment>
         );
     }
@@ -66,15 +75,6 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
                     users: values
                 });
             });
-    }
-
-    private createReportSection() {
-        return (this.state.reports.map(report => (
-            <Segment.Group key={report.username}>
-                {this.createCompetencyReportSection(report.summary)}
-                {report.data.map(this.createCompetencyReportSection)}
-            </Segment.Group>
-        )));
     }
 
     private createCompetencyReportSection(data: IReportData) {
