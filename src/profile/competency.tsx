@@ -3,6 +3,7 @@ import { Segment, Divider, Header, Button, Form, ButtonProps, InputOnChangeData,
 import { loadCompetencies, createCompetency } from "src/store/competencies.actions";
 import { ICompetency } from "src/models/ICompetency";
 import CompetencySegment from "./competency-segment";
+import SegmentPlaceholder from "./segment-placeholder";
 
 interface ICompetenciesPageState {
     competencies: ICompetency[];
@@ -28,7 +29,9 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
     public render() {
         const header = "Competencies";
         const subheader = "Create and manage competencies, subcompetencies and indicators.";
-        const { competencies, selectedCompetencies: selectedCompetency } = this.state;
+        const { competencies, selectedCompetencies: selectedCompetencies } = this.state;
+        const placeholder = selectedCompetencies.length === 0;
+        const placeholderMessage = "No assessment profiles were found. Try creating one.";
         const addButtonDisabled = this.state.competencyName === "";
         const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
         const inputProps = {
@@ -48,18 +51,21 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                 <Divider hidden />
                 <Card.Group>
                     {competencies.map(competency => (
-                    <Card 
-                        key={competency.competencyId}
-                        color={this.getSelectedColor(competency.competencyId)}
-                        header={competency.name} 
-                        meta={competency.date.toDateString()} 
-                        description={competency.description}
-                        onClick={this.handleOnSelectCompetency.bind(this, competency)}
-                    />))}
+                        <Card
+                            key={competency.competencyId}
+                            color={this.getSelectedColor(competency.competencyId)}
+                            header={competency.name}
+                            meta={competency.date.toDateString()}
+                            description={competency.description}
+                            onClick={this.handleOnSelectCompetency.bind(this, competency)}
+                        />
+                    ))}
                 </Card.Group>
                 <Divider hidden />
-
-                {selectedCompetency.map(competency => (
+                {placeholder && (
+                    <SegmentPlaceholder message={placeholderMessage} />
+                )}
+                {selectedCompetencies.map(competency => (
                     <CompetencySegment key={competency.competencyId} competency={competency} />
                 ))}
             </Segment>

@@ -30,8 +30,12 @@ class ProfilePage extends React.Component<{}, IProfilePageState> {
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
                 <Divider hidden />
-                {placeholder && <SegmentPlaceholder message={placeholderMessage} />}
-                {!placeholder && <Card.Group content={assessments.map(this.createAssessmentSection)} />}
+                {placeholder && (
+                    <SegmentPlaceholder message={placeholderMessage} />
+                )}
+                {!placeholder && (
+                    <Card.Group content={assessments.map(this.createAssessmentSection)} />
+                )}
             </Segment>
         );
     }

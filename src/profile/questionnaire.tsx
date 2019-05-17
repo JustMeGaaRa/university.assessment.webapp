@@ -58,42 +58,6 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             text: profile.name,
             value: profile.profileId
         }));
-        const targetUserProps = {
-            selection: true,
-            fluid: true,
-            search: true,
-            options: users,
-            label: 'Target User',
-            placeholder: 'Select a target user'
-        };
-        const accessUsers = {
-            selection: true,
-            fluid: true,
-            multiple: true,
-            search: true,
-            options: users,
-            label: 'Users with Access',
-            placeholder: 'Select users with access'
-        };
-        const targetProfileProps = {
-            selection: true,
-            fluid: true,
-            search: true,
-            options: profiles,
-            label: 'Target Profile',
-            placeholder: 'Select a target profile'
-        };
-        const assessmentDateProps = {
-            fluid: true,
-            label: 'Date Range',
-            type: 'date'
-        };
-        const searchInputprops = {
-            type: 'search',
-            label: 'User Search',
-            placeholder: 'Enter username to filter',
-            icon: 'search'
-        };
 
         return (
             <Segment>
@@ -101,22 +65,61 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
                 <Divider hidden />
                 <Form>
                     <Form.Group widths='equal'>
-                        <Form.Dropdown {...targetUserProps} onChange={this.handleOnTargetUserChanged} />
-                        <Form.Dropdown {...accessUsers} />
-                        <Form.Dropdown {...targetProfileProps} onChange={this.handleOnTargetProfileChanged} />
-                        <Form.Input {...assessmentDateProps} onChange={this.handleOnDateRangeChanged} />
+                        <Form.Dropdown
+                            selection
+                            fluid
+                            search
+                            options={users}
+                            label='Target User'
+                            placeholder='Select a target user'
+                            onChange={this.handleOnTargetUserChanged}
+                        />
+                        <Form.Dropdown
+                            selection
+                            fluid
+                            multiple
+                            search
+                            options={users}
+                            label='Users with Access'
+                            placeholder='Select users with access'
+                        />
+                        <Form.Dropdown
+                            selection
+                            fluid
+                            search
+                            options={profiles}
+                            label='Target Profile'
+                            placeholder='Select a target profile'
+                            onChange={this.handleOnTargetProfileChanged}
+                        />
+                        <Form.Input
+                            fluid
+                            label='Date Range'
+                            type='date'
+                            onChange={this.handleOnDateRangeChanged}
+                        />
                     </Form.Group>
                     <Form.Group>
                         <Form.Button content='Create' primary disabled={createButtonDisabled} onClick={this.handleOnCreateClick} />
                         <Form.Button content='Clear' onClick={this.handleOnClearClick} />
                     </Form.Group>
                     <Form.Group widths='equal'>
-                        <Form.Input {...searchInputprops} onChange={this.handleOnUserSearchChanged} />
+                        <Form.Input
+                            type='search'
+                            icon='search'
+                            label='User Search'
+                            placeholder='Enter username to filter'
+                            onChange={this.handleOnUserSearchChanged}
+                        />
                     </Form.Group>
                 </Form>
                 <Divider hidden />
-                {placeholder && <SegmentPlaceholder message={placeholderMessage} />}
-                {!placeholder && <Card.Group content={assessments.map(this.createAssessmentSection)} />}
+                {placeholder && (
+                    <SegmentPlaceholder message={placeholderMessage} />
+                )}
+                {!placeholder && (
+                    <Card.Group content={assessments.map(this.createAssessmentSection)} />
+                )}
             </Segment>
         );
     }
