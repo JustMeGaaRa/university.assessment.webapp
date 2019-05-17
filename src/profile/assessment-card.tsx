@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Image, Card, Dimmer, Label } from "semantic-ui-react";
+import { Image, Card, Dimmer, Label, LabelProps } from "semantic-ui-react";
 import { IAssessment } from "src/models/IAssessment";
 
 interface IAssessmentCardProps {
     link: string;
     assessment: IAssessment;
+    onRemove?: (event: any, data: LabelProps) => void;
 }
 
 interface IAssessmentCardState {
@@ -16,6 +17,8 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
     constructor(props: IAssessmentCardProps) {
         super(props);
 
+        this.handleOnRemove = this.handleOnRemove.bind(this);
+
         this.state = {
             active: false
         };
@@ -25,21 +28,29 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
         const { avatarUrl, fullname, availableFromDate, description } = this.props.assessment;
         const { active } = this.state;
         const content = (
-            <Label as='a' color='red' corner='right' icon='delete' />
+            <Label color='red' corner='right' onRemove={this.handleOnRemove} />
         );
         const handleShow = () => this.setState({ active: true });
         const handleHide = () => this.setState({ active: false });
-
-        return (
-            <Card>
+        const image = this.props.onRemove
+            ? (
                 <Dimmer.Dimmable
                     as={Image}
                     src={avatarUrl}
                     dimmed={active}
                     dimmer={{ active, content }}
                     onMouseEnter={handleShow}
-                    onMouseLeave={handleHide}>
-                </Dimmer.Dimmable>
+                    onMouseLeave={handleHide}
+                />
+            ) : (
+                <Image
+                    src={avatarUrl}
+                />
+            );
+
+        return (
+            <Card>
+                {image}
                 <Card.Content as={Link} to={this.props.link}>
                     <Card.Header content={fullname} />
                     <Card.Meta content={availableFromDate.toDateString()}></Card.Meta>
@@ -47,6 +58,12 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
                 </Card.Content>
             </Card>
         );
+    }
+
+    private handleOnRemove(event: any, data: LabelProps) {
+        if (this.props.onRemove) {
+            this.props.onRemove(event, data);
+        }
     }
 }
 

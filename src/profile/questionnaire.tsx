@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, Card, InputOnChangeData } from "semantic-ui-react";
+import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, Card, InputOnChangeData, LabelProps } from "semantic-ui-react";
 import { IUser } from "src/models/IUser";
 import { IAssessment } from "src/models/IAssessment";
 import { IAssessmentProfile } from "src/models/IAssessmentProfile";
 import { loadUsers, findUser } from "src/store/user.actions";
-import { loadUserAssessments, createAssessment } from "src/store/assessment.actions";
+import { loadUserAssessments, createAssessment, deleteAssessment } from "src/store/assessment.actions";
 import { loadProfiles, findProfiles } from "src/store/assessment-profile.actions";
 import AssessmentCard from "./assessment-card";
 import SegmentPlaceholder from "./segment-placeholder";
@@ -23,6 +23,7 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     constructor(props: any) {
         super(props);
 
+        this.createAssessmentSection = this.createAssessmentSection.bind(this);
         this.handleOnTargetUserChanged = this.handleOnTargetUserChanged.bind(this);
         this.handleOnTargetProfileChanged = this.handleOnTargetProfileChanged.bind(this);
         this.handleOnDateRangeChanged = this.handleOnDateRangeChanged.bind(this);
@@ -151,8 +152,22 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
     private createAssessmentSection(assessment: IAssessment) {
         const assessmentUrl = `/assessments/${assessment.assessmentId}`;
         return (
-            <AssessmentCard key={assessment.assessmentId} link={assessmentUrl} assessment={assessment} />
+            <AssessmentCard
+                key={assessment.assessmentId}
+                link={assessmentUrl}
+                assessment={assessment}
+                onRemove={this.handleOnRemove.bind(this, assessment)}
+            />
         );
+    }
+
+    private handleOnRemove(assessment: IAssessment, event: any, data: LabelProps) {
+        deleteAssessment(assessment)
+            .then(values => {
+                this.setState({
+                    assessments: values
+                });
+            });
     }
 
     private handleOnTargetUserChanged(event: any, data: DropdownProps) {

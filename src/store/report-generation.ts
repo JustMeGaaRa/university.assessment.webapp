@@ -5,10 +5,6 @@ import { IProfileReport } from "src/models/IProfileReport";
 import { findUser } from "./user.actions";
 import { loadUserAssessments } from "./assessment.actions";
 
-type NamedGroup<T> = {
-    [name: string]: T[];
-}
-
 interface ISubcompetencyResult {
     subcompetency: string;
     answers: IExtendedAnswer[];
@@ -50,7 +46,7 @@ function calculateAverage(answers: IExtendedAnswer[]) {
  * @param name The name of the report record.
  * @param answers A collection of answers to calculate average for.
  */
-function calculateReportRecord(name: string, answers: IExtendedAnswer[]) {
+function calculateReportRecord(name: string, answers: IExtendedAnswer[]): IReportRecord {
     return {
         name: name,
         personal: calculateAverage(answers.filter(x => x.respondentType === RespondentType.Self)),
@@ -59,7 +55,7 @@ function calculateReportRecord(name: string, answers: IExtendedAnswer[]) {
         subordinate: calculateAverage(answers.filter(x => x.respondentType === RespondentType.Subordinate)),
         client: calculateAverage(answers.filter(x => x.respondentType === RespondentType.Client)),
         average: calculateAverage(answers.filter(x => x.respondentType !== RespondentType.Self)),
-    } as IReportRecord;
+    };
 }
 
 /**
@@ -67,33 +63,37 @@ function calculateReportRecord(name: string, answers: IExtendedAnswer[]) {
  * @param assessments A collection of assessments.
  */
 function reverseAnswersHierarchy(assessments: IAssessment[]) {
-    const emptyGroup: NamedGroup<IExtendedAnswer> = {};
     const group = assessments.map(assessment => (
-            assessment.answers.map(answer => ({
-                ...answer,
-                ...assessment
-            } as IExtendedAnswer))))
+            assessment.answers.map<IExtendedAnswer>(answer => ({
+                competency: answer.competency ? answer.competency : "",
+                subcompetency: answer.subcompetency ? answer.subcompetency : "",
+                question: answer.question,
+                result: answer.result,
+                username: assessment.username,
+                respondent: assessment.respondent,
+                respondentType: assessment.respondentType
+            }))
+        ))
         .reduce((left, right) => left.concat(right), [])
         .reduce((group, answer) => {
-            group[answer.competency] = group[answer.competency] || [];
-            group[answer.competency].push(answer);
-            return group;
-        }, emptyGroup);
-
-    const competencies: ICompetencyResult[] = Object.keys(group)
-        .map(competency => {
-            const emptySubgroup: NamedGroup<IExtendedAnswer> = {};
-            const subgroup = group[competency]
+            const existing = group.get(answer.competency);
+            const answers = existing ? existing.concat(answer) : [answer];
+            return group.set(answer.competency, answers);
+        }, new Map<string, IExtendedAnswer[]>());
+    
+    const competencies = Array.from(group.entries())
+        .map<ICompetencyResult>(([competency, answers]) => {
+            const subgroup = answers
                 .reduce((subgroup, answer) => {
-                    subgroup[answer.subcompetency] = subgroup[answer.subcompetency] || [];
-                    subgroup[answer.subcompetency].push(answer);
-                    return subgroup;
-                }, emptySubgroup);
+                    const existing = subgroup.get(answer.subcompetency);
+                    const answers = existing ? existing.concat(answer) : [answer];
+                    return subgroup.set(answer.subcompetency, answers);
+                }, new Map<string, IExtendedAnswer[]>());
 
-            const subcompetencies: ISubcompetencyResult[] = Object.keys(subgroup)
-                .map(subcompetency => ({
-                        subcompetency: subcompetency,
-                        answers: subgroup[subcompetency]
+            const subcompetencies = Array.from(subgroup.entries())
+                .map<ISubcompetencyResult>(([subcompetency, answers]) => ({
+                    subcompetency: subcompetency,
+                    answers: answers
                 }));
 
             return {
@@ -151,7 +151,7 @@ export async function calculateProfileReport(username: string, date: Date) {
             }
         },
         data: competencyReports
-            .map(report => ({
+            .map<IReportData>(report => ({
                 competency: report.competencyReport.name,
                 description: "",
                 general: {
@@ -164,7 +164,7 @@ export async function calculateProfileReport(username: string, date: Date) {
                     description: "Summary for competency divided by subcompetencies.",
                     data: report.subcompetencyReports
                 }
-            } as IReportData))
+            }))
     }
     return report;
 }

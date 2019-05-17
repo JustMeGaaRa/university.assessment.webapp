@@ -6,7 +6,7 @@ export function createCompetency(competency: ICompetency) {
 }
 
 export function deleteCompetency(competency: ICompetency) {
-    return Promise.resolve(competencies.filter( x=> x.competencyId !== competency.competencyId));
+    return Promise.resolve(competencies.filter(x=> x.competencyId !== competency.competencyId));
 }
 
 export function loadCompetencies() {

@@ -52,7 +52,11 @@ class ProfilePage extends React.Component<{}, IProfilePageState> {
     private createAssessmentSection(assessment: IAssessment) {
         const assessmentUrl = `/assessments/${assessment.assessmentId}`;
         return (
-            <AssessmentCard key={assessment.assessmentId} link={assessmentUrl} assessment={assessment} />
+            <AssessmentCard
+                key={assessment.assessmentId}
+                link={assessmentUrl}
+                assessment={assessment}
+            />
         );
     }
 }
