@@ -1,7 +1,17 @@
 import * as React from "react";
-import { Segment, Divider, Header, Button, Form, ButtonProps, InputOnChangeData, Card, CardProps } from "semantic-ui-react";
+import { 
+    Segment,
+    Divider,
+    Header,
+    Button,
+    Form,
+    ButtonProps,
+    InputOnChangeData,
+    Card,
+    CardProps
+} from "semantic-ui-react";
+import { Result, ICompetency } from "src/models";
 import { loadCompetencies, createCompetency } from "src/store/competencies.actions";
-import { ICompetency } from "src/models/ICompetency";
 import CompetencySegment from "./competency-segment";
 import SegmentPlaceholder from "./segment-placeholder";
 
@@ -74,11 +84,12 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     public componentDidMount() {
         loadCompetencies()
-            .then(values => {
-                this.setState({
-                    competencies: values,
-                    selectedCompetencies: values.filter(x => x.competencyId === 1)
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setCompetencies(values),
+                    error => console.log(error)
+                );
             });
     }
 
@@ -104,11 +115,20 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
             subcompetencies: []
         };
         createCompetency(competency)
-            .then(values => {
-                this.setState({
-                    competencies: values
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setCompetencies(values),
+                    error => console.log(error)
+                );
             });
+    }
+
+    private setCompetencies(competencies: ICompetency[]) {
+        this.setState({
+            competencies: competencies,
+            selectedCompetencies: competencies.length > 0 ? [competencies[0]] : []
+        })
     }
 
     private getSelectedColor(competencyId: number) {

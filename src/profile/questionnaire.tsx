@@ -1,8 +1,16 @@
 import * as React from "react";
-import { Segment, Header, Form, ButtonProps, DropdownProps, Divider, Card, InputOnChangeData, LabelProps } from "semantic-ui-react";
-import { IUser } from "src/models/IUser";
-import { IAssessment } from "src/models/IAssessment";
-import { IAssessmentProfile } from "src/models/IAssessmentProfile";
+import {
+    Segment,
+    Header,
+    Form,
+    ButtonProps,
+    DropdownProps,
+    Divider,
+    Card,
+    InputOnChangeData,
+    LabelProps
+} from "semantic-ui-react";
+import { IUser, IAssessment, IAssessmentProfile, Result } from "src/models";
 import { loadUsers, findUser } from "src/store/user.actions";
 import { loadUserAssessments, createAssessment, deleteAssessment } from "src/store/assessment.actions";
 import { loadProfiles, findProfiles } from "src/store/assessment-profile.actions";
@@ -127,10 +135,12 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     public componentDidMount() {
         loadProfiles()
-            .then(values => {
-                this.setState({
-                    assessmentProfiles: values
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setAssessmentProfiles(values),
+                    error => console.log(error)
+                );
             });
             
         loadUserAssessments()
@@ -178,10 +188,12 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
         findProfiles(data.value as number)
-            .then(values => {
-                this.setState({
-                    selectedProfiles: values
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    value => this.setAssessmentProfiles([value]),
+                    error => console.log(error)
+                );
             });
     }
 
@@ -222,6 +234,13 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
         this.setState({
             selectedUser: undefined,
             selectedProfiles: []
+        });
+    }
+
+    private setAssessmentProfiles(profiles: IAssessmentProfile[]) {
+        this.setState({
+            assessmentProfiles: profiles,
+            selectedProfiles: profiles.length > 0 ? [profiles[0]] : []
         });
     }
 

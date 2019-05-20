@@ -1,14 +1,14 @@
-import { competencies } from "./competencies.mocks";
-import { ICompetency } from "src/models/ICompetency";
+import { ICompetency } from "src/models";
+import { RequestClient } from "./request-client";
 
 export function createCompetency(competency: ICompetency) {
-    return Promise.resolve(competencies.concat(competency));
+    return RequestClient.post<ICompetency[]>("api/competencies", competency);
 }
 
 export function deleteCompetency(competency: ICompetency) {
-    return Promise.resolve(competencies.filter(x=> x.competencyId !== competency.competencyId));
+    return RequestClient.delete<ICompetency[]>(`api/competencies/${competency.competencyId}`);
 }
 
 export function loadCompetencies() {
-    return Promise.resolve(competencies);
+    return RequestClient.get<ICompetency[]>("api/competencies");
 }

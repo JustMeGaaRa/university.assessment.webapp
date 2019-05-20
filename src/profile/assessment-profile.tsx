@@ -1,7 +1,17 @@
 import * as React from "react";
-import { Segment, Header, Divider, Form, Button, ButtonProps, InputOnChangeData, Card, Icon, CardProps } from "semantic-ui-react";
-import { IAssessmentProfile } from "src/models/IAssessmentProfile";
-import { ICompetency } from "src/models/ICompetency";
+import { 
+    Segment,
+    Header,
+    Divider,
+    Form,
+    Button,
+    ButtonProps,
+    InputOnChangeData,
+    Card,
+    Icon,
+    CardProps
+} from "semantic-ui-react";
+import { Result, ICompetency, IAssessmentProfile } from "src/models";
 import { loadProfiles, createProfile } from "src/store/assessment-profile.actions";
 import { loadCompetencies } from "src/store/competencies.actions";
 import CompetencySegment from "./competency-segment";
@@ -104,18 +114,21 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
 
     public componentDidMount() {
         loadCompetencies()
-            .then(values => {
-                this.setState({
-                    competencies: values
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setCompetencies(values),
+                    error => console.log(error)
+                );
             });
 
         loadProfiles()
-            .then(values => {
-                this.setState({
-                    assessmentProfiles: values,
-                    selectedProfile: values.filter(x => x.profileId === 1)
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    value => this.setAssessmentProfiles(value),
+                    error => console.log(error)
+                );
             });
     }
 
@@ -141,13 +154,28 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
     private handleOnAddButton(event: any, data: ButtonProps) {
         const { assessmentProfileName, assessmentProfileSummary } = this.state;
         createProfile(assessmentProfileName, assessmentProfileSummary)
-            .then(values => {
-                this.setState({
-                    assessmentProfiles: values,
-                    assessmentProfileName: "",
-                    assessmentProfileSummary: ""
-                });
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setAssessmentProfiles(values),
+                    error => console.log(error)
+                );
             });
+    }
+
+    private setCompetencies(competencies: ICompetency[]) {
+        this.setState({
+            competencies: competencies
+        });
+    }
+
+    private setAssessmentProfiles(profiles: IAssessmentProfile[]) {
+        this.setState({
+            assessmentProfiles: profiles,
+            selectedProfile: profiles.length > 0 ? [profiles[0]] : [],
+            assessmentProfileName: "",
+            assessmentProfileSummary: ""
+        });
     }
 
     private getSelectedColor(profileId: number) {
