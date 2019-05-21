@@ -18,7 +18,7 @@ import SegmentPlaceholder from "./segment-placeholder";
 interface ICompetenciesPageState {
     competencies: ICompetency[];
     competencyName: string;
-    selectedCompetencyId?: number;
+    selectedCompetencyId?: string;
     selectedCompetencies: ICompetency[];
 }
 
@@ -43,29 +43,32 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
         const placeholder = selectedCompetencies.length === 0;
         const placeholderMessage = "No assessment profiles were found. Try creating one.";
         const addButtonDisabled = this.state.competencyName === "";
-        const inputAction = <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />;
-        const inputProps = {
-            action: inputAction,
-            icon: "edit outline",
-            label: "Competency Name",
-            placeholder: "Enter competency name..."
-        };
+        const inputAction = (
+            <Button content='Add' disabled={addButtonDisabled} onClick={this.handleOnAddButton} />
+        );
 
         return (
             <Segment>
                 <Header as='h1' content={header} subheader={subheader} />
                 <Divider hidden />
                 <Form>
-                    <Form.Input {...inputProps} iconPosition="left" onChange={this.handleOnInputChange} />
+                    <Form.Input
+                        action={inputAction}
+                        label="Competency Name"
+                        placeholder="Enter competency name..."
+                        icon="edit outline"
+                        iconPosition="left"
+                        onChange={this.handleOnInputChange}
+                    />
                 </Form>
                 <Divider hidden />
                 <Card.Group>
                     {competencies.map(competency => (
                         <Card
-                            key={competency.competencyId}
-                            color={this.getSelectedColor(competency.competencyId)}
+                            key={competency.id}
+                            color={this.getSelectedColor(competency.id)}
                             header={competency.name}
-                            meta={competency.date.toDateString()}
+                            meta={competency.date}
                             description={competency.description}
                             onClick={this.handleOnSelectCompetency.bind(this, competency)}
                         />
@@ -76,7 +79,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                     <SegmentPlaceholder message={placeholderMessage} />
                 )}
                 {selectedCompetencies.map(competency => (
-                    <CompetencySegment key={competency.competencyId} competency={competency} />
+                    <CompetencySegment key={competency.id} competency={competency} />
                 ))}
             </Segment>
         );
@@ -101,14 +104,13 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     private handleOnSelectCompetency(competency: ICompetency ,event: any, data: CardProps) {
         this.setState({
-            selectedCompetencyId: competency.competencyId,
+            selectedCompetencyId: competency.id,
             selectedCompetencies: [competency]
         });
     }
 
     private handleOnAddButton(event: any, data: ButtonProps) {
-        const competency = {
-            competencyId: 1,
+        const competency: ICompetency = {
             name: this.state.competencyName,
             date: new Date(Date.now()),
             description: "",
@@ -131,10 +133,9 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
         })
     }
 
-    private getSelectedColor(competencyId: number) {
-        return competencyId === this.state.selectedCompetencyId
-            ? "blue"
-            : undefined;
+    private getSelectedColor(competencyId?: string) {
+        const { selectedCompetencyId } = this.state;
+        return competencyId === selectedCompetencyId ? "blue" : undefined;
     }
 }
 

@@ -84,8 +84,8 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                     <Card.Group>
                         {this.state.assessmentProfiles.map(profile => (
                             <Card
-                                key={profile.profileId}
-                                color={this.getSelectedColor(profile.profileId)}
+                                key={profile.id}
+                                color={this.getSelectedColor(profile.id)}
                                 onClick={this.handleOnSelectProfile.bind(this, profile)}>
                                 <Card.Content
                                     header={profile.name}
@@ -104,7 +104,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                     <Segment.Group>
                         {this.state.selectedProfile.map(profile => 
                             profile.competencies.map(competency => (
-                                <CompetencySegment key={competency.competencyId} competency={competency} />
+                                <CompetencySegment key={competency.id} competency={competency} />
                         )))}
                     </Segment.Group>
                 )}
@@ -134,7 +134,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
 
     private handleOnSelectProfile(profile: IAssessmentProfile, event: any, data: CardProps) {
         this.setState({
-            selectedProfileId: profile.profileId,
+            selectedProfileId: profile.id,
             selectedProfile: [profile]
         });
     }
@@ -178,10 +178,9 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
         });
     }
 
-    private getSelectedColor(profileId: number) {
-        return profileId === this.state.selectedProfileId
-            ? "blue"
-            : undefined;
+    private getSelectedColor(profileId?: number) {
+        const { selectedProfileId } = this.state;
+        return profileId === selectedProfileId ? "blue" : undefined;
     }
 }
 

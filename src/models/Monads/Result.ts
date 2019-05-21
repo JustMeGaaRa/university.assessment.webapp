@@ -5,11 +5,11 @@ export type Result<TResult, TError> =
     | { type: "error"; error: TError; message?: string }
 
 export namespace Result {
-    export function ofError<TResult, TError>(value: TResult): Result<TResult, TError> {
+    export function ofResult<TResult, TError>(value: TResult): Result<TResult, TError> {
         return { type: "success", value: value };
     }
 
-    export function ofResult<TResult, TError>(error: TError, message?: string): Result<TResult, TError> {
+    export function ofError<TResult, TError>(error: TError, message?: string): Result<TResult, TError> {
         return { type: "error", error: error, message: message };
     }
 

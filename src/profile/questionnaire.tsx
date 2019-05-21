@@ -63,9 +63,9 @@ class QuestionnairePage extends React.Component<any, IQuestionnairePageState> {
             value: user.fullname
         }));
         const profiles = this.state.assessmentProfiles.map(profile => ({
-            key: profile.profileId,
+            key: profile.id,
             text: profile.name,
-            value: profile.profileId
+            value: profile.id
         }));
 
         return (

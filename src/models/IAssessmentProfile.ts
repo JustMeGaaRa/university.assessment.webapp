@@ -1,7 +1,7 @@
 import { ICompetency } from "./ICompetency";
 
 export interface IAssessmentProfile {
-    profileId: number;
+    id?: number;
     name: string;
     creationDate: Date;
     competencies: ICompetency[];

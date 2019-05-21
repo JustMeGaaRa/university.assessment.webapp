@@ -108,7 +108,7 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
         const { competency } = this.props;
         const subcompetency: ISubcompetency = {
             subcompetencyId: 0,
-            competencyId: competency.competencyId,
+            competencyId: competency.id,
             name: this.state.subcompetency,
             indicators: []
         };
@@ -122,7 +122,6 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
     private handleOnAddIndicatorButton(subcompetency: ISubcompetency, event: any, data: ButtonProps) {
         const indicatorName = this.state.indicatorNames[subcompetency.name];
         const indicator: IIndicator = {
-            indicatorId: 0,
             subcompetencyId: subcompetency.subcompetencyId,
             description: indicatorName,
         };

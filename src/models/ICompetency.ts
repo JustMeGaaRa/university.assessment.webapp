@@ -2,7 +2,7 @@ import { ISubcompetency } from "./ISubcompetency";
 import { IIndicator } from "./IIndicator";
 
 export interface ICompetency {
-    competencyId: number;
+    id?: string;
     name: string;
     date: Date;
     description: string;
@@ -13,7 +13,7 @@ export function flatMapIndicators(competencies: ICompetency[]) {
     return competencies.map(competency => 
         competency.subcompetencies.map<ISubcompetency>(subcompetency => ({
             ...subcompetency,
-            competencyId: competency.competencyId,
+            competencyId: competency.id,
             competencyName: competency.name
         }))
     )

@@ -1,7 +1,7 @@
 export interface IIndicator {
-    indicatorId: number;
+    indicatorId?: string;
     description: string;
-    competencyId?: number;
+    competencyId?: string;
     competencyName?: string;
     subcompetencyId: number;
     subcompetencyName?: string;
