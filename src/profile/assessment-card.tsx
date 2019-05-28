@@ -1,11 +1,14 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Image, Card, Dimmer, Label, LabelProps } from "semantic-ui-react";
-import { IAssessment } from "src/models/IAssessment";
 
 interface IAssessmentCardProps {
     link: string;
-    assessment: IAssessment;
+    avatarUrl: string;
+    fullname: string;
+    from: Date;
+    to: Date;
+    description: string;
     onRemove?: (event: any, data: LabelProps) => void;
 }
 
@@ -25,7 +28,7 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
     }
 
     public render() {
-        const { avatarUrl, fullname, availableFromDate, description } = this.props.assessment;
+        const { avatarUrl, fullname, from, to, description } = this.props;
         const { active } = this.state;
         const content = (
             <Label color='red' corner='right' onRemove={this.handleOnRemove} />
@@ -53,7 +56,7 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
                 {image}
                 <Card.Content as={Link} to={this.props.link}>
                     <Card.Header content={fullname} />
-                    <Card.Meta content={availableFromDate.toDateString()}></Card.Meta>
+                    <Card.Meta content={`${from} - ${to}`}></Card.Meta>
                     <Card.Description content={description} />
                 </Card.Content>
             </Card>

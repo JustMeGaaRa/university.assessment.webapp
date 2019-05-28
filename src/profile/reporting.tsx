@@ -1,10 +1,7 @@
 import * as React from "react";
 import { Segment, Header, Form, Divider, DropdownProps } from "semantic-ui-react";
 import { BarChart, XAxis, YAxis, Legend, Bar, Tooltip, ResponsiveContainer } from "recharts";
-import { IUser } from "src/models/IUser";
-import { IProfileReport } from "src/models/IProfileReport";
-import { IReportData } from "src/models/IReportData";
-import { IReportGroup } from "src/models/IReportGroup";
+import { IUser, IProfileReport, IReportData, IReportGroup } from "src/models";
 import { loadUsers } from "src/store/user.actions";
 import { calculateProfileReport } from "src/store/report-generation";
 import SegmentPlaceholder from "./segment-placeholder";

@@ -1,7 +1,7 @@
 import { IAnswer } from "./IAnswer";
 
-export interface IAssessment {
-    assessmentId: number;
+export interface IAssessmentResult {
+    id: number;
     username: string;
     fullname: string;
     avatarUrl: string;

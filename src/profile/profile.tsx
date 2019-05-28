@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Card, Segment, Header, Divider } from 'semantic-ui-react';
-import { IAssessment } from 'src/models/IAssessment';
-import { loadRespondentAssessments } from 'src/store/assessment.actions';
+import { Result, IAssessmentResult } from 'src/models';
+import { loadAssessmentResults } from 'src/store/assessment-result.actions';
 import AssessmentCard from './assessment-card';
 import SegmentPlaceholder from './segment-placeholder';
 
 interface IProfilePageState {
-    assessments: IAssessment[];
+    assessments: IAssessmentResult[];
 }
 
 class ProfilePage extends React.Component<{}, IProfilePageState> {
@@ -41,21 +41,27 @@ class ProfilePage extends React.Component<{}, IProfilePageState> {
     }
 
     public componentDidMount() {
-        loadRespondentAssessments("matthew")
-            .then(values => {
-                this.setState({
-                    assessments: values
-                });
+        loadAssessmentResults("matthew")
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setState({ assessments: values }),
+                    error => console.log(error)
+                );
             });
     }
 
-    private createAssessmentSection(assessment: IAssessment) {
-        const assessmentUrl = `/assessments/${assessment.assessmentId}`;
+    private createAssessmentSection(assessment: IAssessmentResult) {
+        const assessmentUrl = `/assessments/${assessment.id}`;
         return (
             <AssessmentCard
-                key={assessment.assessmentId}
+                key={assessment.id}
                 link={assessmentUrl}
-                assessment={assessment}
+                avatarUrl={assessment.avatarUrl}
+                fullname={assessment.fullname}
+                from={assessment.availableFromDate}
+                to={assessment.availableToDate}
+                description={assessment.description}
             />
         );
     }

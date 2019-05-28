@@ -2,10 +2,10 @@ import * as React from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import { Menu, Image, Dropdown, Segment } from 'semantic-ui-react';
 import ProfilePage from './profile/profile';
-import AssessmentPage from './profile/assessment';
 import CompetencyPage from './profile/competency';
+import AssessmentPage from './profile/assessment';
+import AssessmentResultPage from './profile/assessment-result';
 import AssessmentProfilePage from './profile/assessment-profile';
-import QuestionnairePage from './profile/questionnaire';
 import ReportingPage from './profile/reporting';
 
 type AppState = {
@@ -51,8 +51,8 @@ class App extends React.Component<any, AppState> {
 
                             <Route exact path='/competencies/' component={CompetencyPage} />
                             <Route exact path='/assessment-profiles/' component={AssessmentProfilePage} />
-                            <Route exact path='/assessments/' component={QuestionnairePage} />
-                            <Route exact path='/assessments/:assessmentId' component={AssessmentPage} />
+                            <Route exact path='/assessments/' component={AssessmentPage} />
+                            <Route exact path='/assessments/:assessmentId' component={AssessmentResultPage} />
                             <Route exact path='/reporting/' component={ReportingPage} />
                             <Route exact path='/' component={ProfilePage} />
                         </Segment>

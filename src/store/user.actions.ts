@@ -3,19 +3,23 @@ import { IUser } from "../models/IUser";
 const users: IUser[] = [
     {
         username: 'matthew',
-        fullname: 'Matthew'
+        fullname: 'Matthew',
+        avatarUrl: ''
     },
     {
         username: 'rachel',
-        fullname: 'Rachel'
+        fullname: 'Rachel',
+        avatarUrl: ''
     },
     {
         username: 'molly',
-        fullname: 'Molly'
+        fullname: 'Molly',
+        avatarUrl: ''
     },
     {
         username: 'steve',
-        fullname: 'Steve'
+        fullname: 'Steve',
+        avatarUrl: ''
     }
 ];
 

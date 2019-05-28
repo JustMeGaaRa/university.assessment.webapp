@@ -3,6 +3,6 @@ export interface IIndicator {
     description: string;
     competencyId?: string;
     competencyName?: string;
-    subcompetencyId: number;
+    subcompetencyId?: number;
     subcompetencyName?: string;
 }

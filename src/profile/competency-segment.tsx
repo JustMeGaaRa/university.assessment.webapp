@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Segment, Header, Label, Form, InputOnChangeData, Button, ButtonProps, LabelProps } from "semantic-ui-react";
-import { ICompetency } from "src/models/ICompetency";
-import { ISubcompetency } from "src/models/ISubcompetency";
-import { IIndicator } from "src/models/IIndicator";
+import { ICompetency } from "src/models/Competencies/ICompetency";
+import { ISubcompetency } from "src/models/Competencies/ISubcompetency";
+import { IIndicator } from "src/models/Competencies/IIndicator";
 
 interface ICompetencySegmentProps {
     competency: ICompetency;
+    onUpdateCompetency?: (competency: ICompetency) => void;
 }
 
 interface ICompetencySegmentState {
@@ -107,12 +108,14 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
     private handleOnAddSubcompetencyButton(event: any, data: ButtonProps) {
         const { competency } = this.props;
         const subcompetency: ISubcompetency = {
-            subcompetencyId: 0,
             competencyId: competency.id,
             name: this.state.subcompetency,
             indicators: []
         };
         competency.subcompetencies = competency.subcompetencies.concat(subcompetency);
+        if (this.props.onUpdateCompetency) {
+            this.props.onUpdateCompetency(this.props.competency);
+        }
         this.setState({
             subcompetency: "",
             indicatorNames: this.state.indicatorNames,
@@ -126,6 +129,9 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
             description: indicatorName,
         };
         subcompetency.indicators = subcompetency.indicators.concat(indicator);
+        if (this.props.onUpdateCompetency) {
+            this.props.onUpdateCompetency(this.props.competency);
+        }
         this.setState({
             indicatorNames: this.state.indicatorNames
         });
@@ -133,6 +139,9 @@ class CompetencySegment extends React.Component<ICompetencySegmentProps, ICompet
 
     private handleOnLabelRemove(subcompetency: ISubcompetency, event: any, data: LabelProps) {
         subcompetency.indicators = subcompetency.indicators.filter(x => x.description !== data.content);
+        if (this.props.onUpdateCompetency) {
+            this.props.onUpdateCompetency(this.props.competency);
+        }
         this.setState({
             indicatorNames: this.state.indicatorNames
         });

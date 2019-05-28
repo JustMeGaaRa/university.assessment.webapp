@@ -1,4 +1,4 @@
-import { IReportRecord } from "../models/IReportRecord";
+import { IReportRecord } from "./IReportRecord";
 
 export interface IReportGroup {
     title: string;

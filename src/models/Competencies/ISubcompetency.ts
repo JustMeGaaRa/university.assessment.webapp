@@ -1,7 +1,7 @@
 import { IIndicator } from "./IIndicator";
 
 export interface ISubcompetency {
-    subcompetencyId: number;
+    subcompetencyId?: number;
     name: string;
     competencyId?: string;
     competencyName?: string;

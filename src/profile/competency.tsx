@@ -11,7 +11,7 @@ import {
     CardProps
 } from "semantic-ui-react";
 import { Result, ICompetency } from "src/models";
-import { loadCompetencies, createCompetency } from "src/store/competencies.actions";
+import { loadCompetencies, createCompetency, updateCompetency } from "src/store/competencies.actions";
 import CompetencySegment from "./competency-segment";
 import SegmentPlaceholder from "./segment-placeholder";
 
@@ -26,6 +26,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
     constructor(props: any) {
         super(props);
 
+        this.handleOnUpdateCompetency = this.handleOnUpdateCompetency.bind(this);
         this.handleOnInputChange = this.handleOnInputChange.bind(this);
         this.handleOnAddButton = this.handleOnAddButton.bind(this);
 
@@ -79,7 +80,7 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
                     <SegmentPlaceholder message={placeholderMessage} />
                 )}
                 {selectedCompetencies.map(competency => (
-                    <CompetencySegment key={competency.id} competency={competency} />
+                    <CompetencySegment key={competency.id} competency={competency} onUpdateCompetency={this.handleOnUpdateCompetency} />
                 ))}
             </Segment>
         );
@@ -87,6 +88,17 @@ class CompetencyPage extends React.Component<any, ICompetenciesPageState> {
 
     public componentDidMount() {
         loadCompetencies()
+            .then(result => {
+                Result.match(
+                    result,
+                    values => this.setCompetencies(values),
+                    error => console.log(error)
+                );
+            });
+    }
+
+    private handleOnUpdateCompetency(competency: ICompetency) {
+        updateCompetency(competency)
             .then(result => {
                 Result.match(
                     result,

@@ -1,9 +1,12 @@
-import { IAssessment, RespondentType } from "src/models/IAssessment";
-import { IReportRecord } from "src/models/IReportRecord";
-import { IReportData } from "src/models/IReportData";
-import { IProfileReport } from "src/models/IProfileReport";
+import {
+    IAssessmentResult,
+    IReportRecord,
+    IReportData,
+    IProfileReport, 
+    Result} from "src/models";
+import { RespondentType } from "../models/Assessments/IAssessmentResult";
 import { findUser } from "./user.actions";
-import { loadUserAssessments } from "./assessment.actions";
+import { loadAssessmentResults } from "./assessment-result.actions";
 
 interface ISubcompetencyResult {
     subcompetency: string;
@@ -62,7 +65,7 @@ function calculateReportRecord(name: string, answers: IExtendedAnswer[]): IRepor
  * Transforms the structure of the assessment object hierarchy into on groupped by competency.
  * @param assessments A collection of assessments.
  */
-function reverseAnswersHierarchy(assessments: IAssessment[]) {
+function reverseAnswersHierarchy(assessments: IAssessmentResult[]) {
     const group = assessments.map(assessment => (
             assessment.answers.map<IExtendedAnswer>(answer => ({
                 competency: answer.competency ? answer.competency : "",
@@ -111,7 +114,8 @@ function reverseAnswersHierarchy(assessments: IAssessment[]) {
  * @param date A date used to load only relevant assessments.
  */
 export async function calculateProfileReport(username: string, date: Date) {
-    const assessments = await loadUserAssessments(username);
+    const assessmentResult = await loadAssessmentResults(username);
+    const assessments = Result.valueOrDefault(assessmentResult, []);
     const competencyAnswers = reverseAnswersHierarchy(assessments);
     const competencyReports = competencyAnswers
         .map(result => {

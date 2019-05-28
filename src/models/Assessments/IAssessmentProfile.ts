@@ -1,4 +1,4 @@
-import { ICompetency } from "./ICompetency";
+import { ICompetency } from "../Competencies/ICompetency";
 
 export interface IAssessmentProfile {
     id?: number;

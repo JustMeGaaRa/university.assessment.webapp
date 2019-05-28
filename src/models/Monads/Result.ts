@@ -35,4 +35,13 @@ export namespace Result {
                 break;
         }
     }
+
+    export function valueOrDefault<TResult, TError>(result: Result<TResult, TError>, defaultValue: TResult) {
+        switch (result.type) {
+            case "success":
+                return result.value;
+            case "error":
+                return defaultValue;
+        }
+    }
 }
