@@ -14,7 +14,7 @@ import {
 import { IUser, IAssessment, IAssessmentProfile, Result } from "src/models";
 import { loadUsers } from "src/store/user.actions";
 import { loadUserAssessments, createAssessment, deleteAssessment } from "src/store/assessment.actions";
-import { loadProfiles, findProfiles } from "src/store/assessment-profile.actions";
+import { loadProfiles } from "src/store/assessment-profile.actions";
 import AssessmentCard from "./assessment-card";
 import SegmentPlaceholder from "./segment-placeholder";
 
@@ -69,7 +69,7 @@ class AssessmentPage extends React.Component<any, IQuestionnairePageState> {
         const profiles = this.state.assessmentProfiles.map<DropdownItemProps>(profile => ({
             key: profile.id,
             text: profile.name,
-            value: profile.id
+            value: profile.name
         }));
 
         return (
@@ -208,14 +208,9 @@ class AssessmentPage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private handleOnTargetProfileChanged(event: any, data: DropdownProps) {
-        findProfiles(data.value as number)
-            .then(result => {
-                Result.match(
-                    result,
-                    value => this.setAssessmentProfiles([value]),
-                    error => console.log(error)
-                );
-            });
+        this.setState({
+            selectedProfile: data.value as string
+        });
     }
 
     private handleOnDateRangeChanged(event: any, data: InputOnChangeData) {

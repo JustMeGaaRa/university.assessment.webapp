@@ -89,7 +89,7 @@ class AssessmentProfilePage extends React.Component<any, IAssessmentProfilePageS
                                 onClick={this.handleOnSelectProfile.bind(this, profile)}>
                                 <Card.Content
                                     header={profile.name}
-                                    meta={profile.creationDate.toDateString()}
+                                    meta={profile.creationDate}
                                     description={`This is an assessment profile for ${profile.name}.`}
                                 />
                                 <Card.Content extra>

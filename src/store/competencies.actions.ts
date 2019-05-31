@@ -1,20 +1,18 @@
 import { ICompetency } from "src/models";
 import { RequestClient } from "./request-client";
 
-const hostname = "https://university-assessments-api.azurewebsites.net";
-
 export function createCompetency(competency: ICompetency) {
-    return RequestClient.post<ICompetency[]>(`${hostname}/api/competencies`, competency);
+    return RequestClient.post<ICompetency[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/competencies`, competency);
 }
 
 export function loadCompetencies() {
-    return RequestClient.get<ICompetency[]>(`${hostname}/api/competencies`);
+    return RequestClient.get<ICompetency[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/competencies`);
 }
 
 export function updateCompetency(competency: ICompetency) {
-    return RequestClient.put<ICompetency[]>(`${hostname}/api/competencies/${competency.id}`)
+    return RequestClient.put<ICompetency[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/competencies/${competency.id}`, competency);
 }
 
 export function deleteCompetency(competency: ICompetency) {
-    return RequestClient.delete<ICompetency[]>(`${hostname}/api/competencies/${competency.id}`);
+    return RequestClient.delete<ICompetency[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/competencies/${competency.id}`);
 }
