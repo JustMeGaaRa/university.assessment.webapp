@@ -2,11 +2,11 @@ import {
     IAssessmentResult,
     IReportRecord,
     IReportData,
-    IProfileReport, 
+    IAssessmentReport, 
     Result} from "src/models";
 import { RespondentType } from "../models/Assessments/IAssessmentResult";
 import { findUser } from "./user.actions";
-import { loadAssessmentResults } from "./assessment-result.actions";
+import { loadAssessmentResults } from "./assessment.actions";
 
 interface ISubcompetencyResult {
     subcompetency: string;
@@ -72,8 +72,8 @@ function reverseAnswersHierarchy(assessments: IAssessmentResult[]) {
                 subcompetency: answer.subcompetency ? answer.subcompetency : "",
                 question: answer.question,
                 result: answer.result,
-                username: assessment.username,
-                respondent: assessment.respondent,
+                username: assessment.targetUser.username,
+                respondent: assessment.respondent.username,
                 respondentType: assessment.respondentType
             }))
         ))
@@ -113,10 +113,10 @@ function reverseAnswersHierarchy(assessments: IAssessmentResult[]) {
  * @param username A username for whom to load the assessment results.
  * @param date A date used to load only relevant assessments.
  */
-export async function calculateProfileReport(username: string, date: Date) {
-    const assessmentResult = await loadAssessmentResults(username);
-    const assessments = Result.valueOrDefault(assessmentResult, []);
-    const competencyAnswers = reverseAnswersHierarchy(assessments);
+export async function calculateProfileReport(assessmentId: number, username: string, date: Date) {
+    const assessmentResponse = await loadAssessmentResults(assessmentId);
+    const assessmentResults = Result.valueOrDefault(assessmentResponse, []);
+    const competencyAnswers = reverseAnswersHierarchy(assessmentResults);
     const competencyReports = competencyAnswers
         .map(result => {
             const answers = result.subcompetencies
@@ -135,7 +135,7 @@ export async function calculateProfileReport(username: string, date: Date) {
         });
     
     const user = findUser(username);
-    const report: IProfileReport = {
+    const report: IAssessmentReport = {
         username: user ? user.username : "",
         fullname: user ? user.fullname : "",
         description: "",

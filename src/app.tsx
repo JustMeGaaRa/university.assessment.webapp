@@ -4,7 +4,6 @@ import { Menu, Image, Dropdown, Segment } from 'semantic-ui-react';
 import ProfilePage from './profile/profile';
 import CompetencyPage from './profile/competency';
 import AssessmentPage from './profile/assessment';
-import AssessmentResultPage from './profile/assessment-result';
 import AssessmentProfilePage from './profile/assessment-profile';
 import ReportingPage from './profile/reporting';
 
@@ -52,7 +51,6 @@ class App extends React.Component<any, AppState> {
                             <Route exact path='/competencies/' component={CompetencyPage} />
                             <Route exact path='/assessment-profiles/' component={AssessmentProfilePage} />
                             <Route exact path='/assessments/' component={AssessmentPage} />
-                            <Route exact path='/assessments/:assessmentId' component={AssessmentResultPage} />
                             <Route exact path='/reporting/' component={ReportingPage} />
                             <Route exact path='/' component={ProfilePage} />
                         </Segment>

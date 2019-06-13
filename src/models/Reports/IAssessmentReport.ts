@@ -1,6 +1,6 @@
 import { IReportData } from "./IReportData";
 
-export interface IProfileReport {
+export interface IAssessmentReport {
     username: string;
     fullname: string;
     description: string,

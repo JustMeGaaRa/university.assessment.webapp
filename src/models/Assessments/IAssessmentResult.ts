@@ -1,11 +1,10 @@
 import { IAnswer } from "./IAnswer";
+import { IUser } from "../IUser";
 
 export interface IAssessmentResult {
     id: number;
-    username: string;
-    fullname: string;
-    avatarUrl: string;
-    respondent: string;
+    targetUser: IUser;
+    respondent: IUser;
     respondentType: RespondentType;
     availableFromDate: Date;
     availableToDate: Date;

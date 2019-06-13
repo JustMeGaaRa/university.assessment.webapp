@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Segment, Header, Form, Divider, DropdownProps } from "semantic-ui-react";
 import { BarChart, XAxis, YAxis, Legend, Bar, Tooltip, ResponsiveContainer } from "recharts";
-import { IUser, IProfileReport, IReportData, IReportGroup } from "src/models";
+import { IUser, IAssessmentReport, IReportData, IReportGroup } from "src/models";
 import { loadUsers } from "src/store/user.actions";
-import { calculateProfileReport } from "src/store/report-generation";
+import { calculateProfileReport } from "src/store/assessment-report.actions";
 import SegmentPlaceholder from "./segment-placeholder";
 
 interface IReportingPageState {
     username: string;
     users: IUser[];
-    reports: IProfileReport[];
+    reports: IAssessmentReport[];
 }
 
 class ReportingPage extends React.Component<any, IReportingPageState> {
@@ -123,7 +123,7 @@ class ReportingPage extends React.Component<any, IReportingPageState> {
     }
 
     private handleOnSearchUserChanged(event: any, data: DropdownProps) {
-        calculateProfileReport(data.value as string, new Date(Date.now()))
+        calculateProfileReport(1, data.value as string, new Date(Date.now()))
             .then(value => {
                 this.setState({
                     username: data.value as string,

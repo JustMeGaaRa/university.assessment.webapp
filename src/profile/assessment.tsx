@@ -169,11 +169,9 @@ class AssessmentPage extends React.Component<any, IQuestionnairePageState> {
     }
 
     private createAssessmentSection(assessment: IAssessment) {
-        const assessmentUrl = `/assessments/${assessment.id}`;
         return (
             <AssessmentCard
                 key={assessment.id}
-                link={assessmentUrl}
                 avatarUrl={assessment.targetUser.avatarUrl}
                 fullname={assessment.targetUser.fullname}
                 from={assessment.availableFromDate}
@@ -242,7 +240,8 @@ class AssessmentPage extends React.Component<any, IQuestionnairePageState> {
                 accessUsers: accessUsers,
                 availableFromDate: new Date(this.state.date),
                 availableToDate: new Date(this.state.date),
-                assessmentProfile: this.state.selectedProfile
+                assessmentProfile: this.state.selectedProfile,
+                results: []
             }
             
             createAssessment(assessment)

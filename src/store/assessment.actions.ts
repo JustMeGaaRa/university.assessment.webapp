@@ -1,4 +1,4 @@
-import { IAssessment } from "src/models";
+import { IAssessment, IAssessmentResult, IAssessmentReport } from "src/models";
 import { RequestClient } from "./request-client";
 
 export function createAssessment(assessment: IAssessment) {
@@ -19,4 +19,20 @@ export function loadRespondentAssessments(username?: string) {
 
 export function findUserAssessment(assessmentId: number) {
     return RequestClient.get<IAssessment>(`${process.env.REACT_APP_SERVER_API_URL}/api/assessments/${assessmentId}`);
+}
+
+export function loadAssessmentResults(assessmentId: number) {
+    return RequestClient.get<IAssessmentResult[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/assessments/${assessmentId}/results`);
+}
+
+export function findAssessmentResult(assessmentId: number) {
+    return RequestClient.get<IAssessmentResult>(`${process.env.REACT_APP_SERVER_API_URL}/api/assessments/${assessmentId}/results/${assessmentId}`);
+}
+
+export function updateAssessmentResult(assessmentId: number, result: IAssessmentResult) {
+    return RequestClient.put<IAssessmentResult[]>(`${process.env.REACT_APP_SERVER_API_URL}/api/assessments/${assessmentId}/results/${assessmentId}`, result);
+}
+
+export function loadAssessmentReport(assessmentId: number) {
+    return RequestClient.get<IAssessmentReport>(`${process.env.REACT_APP_SERVER_API_URL}/api/assessments/${assessmentId}/report`);
 }

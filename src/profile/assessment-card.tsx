@@ -1,14 +1,13 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 import { Image, Card, Dimmer, Label, LabelProps } from "semantic-ui-react";
 
 interface IAssessmentCardProps {
-    link: string;
     avatarUrl: string;
     fullname: string;
     from: Date;
     to: Date;
     description: string;
+    onClick?: (event: any, data: any) => void;
     onRemove?: (event: any, data: LabelProps) => void;
 }
 
@@ -52,11 +51,11 @@ class AssessmentCard extends React.Component<IAssessmentCardProps, IAssessmentCa
             );
 
         return (
-            <Card>
+            <Card onClick={this.props.onClick}>
                 {image}
-                <Card.Content as={Link} to={this.props.link}>
+                <Card.Content>
                     <Card.Header content={fullname} />
-                    <Card.Meta content={`${from} - ${to}`}></Card.Meta>
+                    <Card.Meta content={`${from.toDateString()} - ${to.toDateString()}`}></Card.Meta>
                     <Card.Description content={description} />
                 </Card.Content>
             </Card>

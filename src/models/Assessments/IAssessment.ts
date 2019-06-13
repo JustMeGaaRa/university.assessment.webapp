@@ -1,4 +1,5 @@
 import { IUser } from "../IUser";
+import { IAssessmentResult } from "./IAssessmentResult";
 
 export interface IAssessment {
     id: number;
@@ -7,4 +8,5 @@ export interface IAssessment {
     availableFromDate: Date;
     availableToDate: Date;
     assessmentProfile: string;
+    results: IAssessmentResult[];
 }
